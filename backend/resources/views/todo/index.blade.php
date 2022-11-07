@@ -39,8 +39,12 @@
                                 <td class="child{{$todo->id}}">{{ $todo->id }}</td>
                                 <td class="child{{$todo->id}}" id="child-title-{{$todo->id}}">{{ $todo->title}}</td>
                                 <td></td>
-                                <td>ステータス</td>
-                                <td><button class="btn btn-success">完了</button></td>
+                                <td><span class="label {{$todo->status_class}}">{{$todo->status_label}}</span></td>
+                                <td>
+                                    <form action="todos/status/{{$todo->id}}" method="GET">
+                                        <button class="btn btn-success">完了にする</button>
+                                    </form>
+                                </td>
                                 <td></td>
                                 <td class="child{{$todo->id}}"><a class="btn btn-success" href="/todos/edit/{{$todo->id}}" id="edit-button-{{$todo->id}}">編集</a></td>
                                 <td class="child{{$todo->id}}">
