@@ -31,6 +31,10 @@ Route::group(['middleware' => 'auth'], function() {
     Route::put('/todos/edit/{id}', [App\Http\Controllers\TodoController::class, 'update']);
     Route::get('/todos/del/{id}', [App\Http\Controllers\TodoController::class, 'check'])->name('todo.check');
     Route::put('/todos/del/{id}', [App\Http\Controllers\TodoController::class, 'del']);
+    Route::get('/todos/status/{id}', [App\Http\Controllers\TodoController::class, 'status_check'])->name('todo.status');
+    Route::post('/todos/status/{id}', [App\Http\Controllers\TodoController::class, 'status_change']);
+
+
 });
 
 // test

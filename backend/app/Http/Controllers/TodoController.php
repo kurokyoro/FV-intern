@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Validator;
 
 class TodoController extends Controller
 {
+
+    
     /**
      * Display a listing of the resource.
      *
@@ -51,6 +53,8 @@ class TodoController extends Controller
         );
     }
 
+
+    
     public function edit($id)
     {
         $todo = DB::table('todos')->find($id);
@@ -87,6 +91,23 @@ class TodoController extends Controller
             'id' => $request -> id
         ];
         DB::delete('delete from todos where id = :id', $param);
+        return redirect('/todos');
+        
+    }
+
+    public function status_check(int $id){
+
+        $todo = DB::table('todos')->find($id);
+        return view('todo.status',['todo'=>$todo]);
+        
+    }
+
+    public function status_change(Request $request){
+
+        $param = [
+            'id' => $request -> id
+        ];
+        DB::update('update todos set status_flag = 2 where id = :id', $param);
         return redirect('/todos');
         
     }
