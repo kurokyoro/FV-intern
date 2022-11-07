@@ -4,9 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Todo;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-
 
 class TodoController extends Controller
 {
@@ -51,44 +48,10 @@ class TodoController extends Controller
         );
     }
 
-    public function edit($id)
+    public function edit(Request $request )
     {
-        $todo = DB::table('todos')->find($id);
-        return view('todo.edit',['todo'=>$todo]);
+        return view('todo.edit');
     }
 
-
-    public function update(Request $request, int $id)
-    {
-    
-      $param = [
-        'title' => $request -> title,
-        'id' => $request -> id
-      ];
-
-    
-      //データベースに保存
-      DB::update('update todos set title = :title where id = :id',$param);
-    
-      //リダイレクト
-      return redirect('/todos');
-    }
-
-    public function check(int $id){
-
-        $todo = DB::table('todos')->find($id);
-        return view('todo.check',['todo'=>$todo]);
-        
-    }
-
-    public function del(Request $request){
-
-        $param = [
-            'id' => $request -> id
-        ];
-        DB::delete('delete from todos where id = :id', $param);
-        return redirect('/todos');
-        
-    }
 
 }

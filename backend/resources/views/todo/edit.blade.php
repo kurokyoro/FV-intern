@@ -12,7 +12,7 @@
                     @endforeach
                 </div>
                 @endif
-                <form method="POST" action="/todos/edit/{{$todo->id}}" class="form-horizontal" enctype="multipart/form-data">
+                <form method="POST" action="" class="form-horizontal" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="form-group">
@@ -22,7 +22,7 @@
                     <hr>
                     <div class="form-group">
                         <label for="title" class="control-label">タスク名<span class="badge badge-danger ml-2">{{ __('必須') }}</span></label>
-                        <input class="form-control" name="title" type="text" value="{{ $todo->title }}">
+                        <input class="form-control" name="title" type="text" value="">
                     </div>
                     
                     <hr>
