@@ -32,3 +32,5 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('/todos/del/{id}', [App\Http\Controllers\TodoController::class, 'check'])->name('todo.check');
     Route::put('/todos/del/{id}', [App\Http\Controllers\TodoController::class, 'del']);
 });
+
+// test
