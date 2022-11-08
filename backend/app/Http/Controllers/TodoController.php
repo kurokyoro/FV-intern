@@ -41,6 +41,7 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
+
         $todo = new Todo();
         $form = $request -> all();
         unset($form['_token']);
