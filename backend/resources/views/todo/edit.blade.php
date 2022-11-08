@@ -26,6 +26,12 @@
                     </div>
                     
                     <hr>
+                    <div class="form-group">
+                        <label for="due_date" class="control-label">期日<span class="badge badge-danger ml-2">{{ __('必須') }}</span></label>
+                        <input class="form-control" name="due_date" type="date" value="{{ $todo->due_date }}">
+                    </div>
+                    
+                    <hr>
                     <td><a href="{{ route('todo.index') }}" class="btn btn-success">一覧に戻る</a></td>
                     <button class="btn btn-primary" type="submit">更新</button>
                 </form>

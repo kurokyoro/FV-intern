@@ -20,6 +20,7 @@ return new class extends Migration
             $table->dateTime('created_at')->useCurrent()->nullable();
             $table->dateTime('updated_at')->useCurrent()->nullable();
             $table->foreignId('user_id')->constrained();
+            $table->date('due_date');
         });
     }
 
