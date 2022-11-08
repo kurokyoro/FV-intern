@@ -1,0 +1,5 @@
+{
+    "require": {
+        "kyslik/column-sortable": "^6.4"
+    }
+}

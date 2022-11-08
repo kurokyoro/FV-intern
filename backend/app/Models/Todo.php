@@ -4,15 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Kyslik\ColumnSortable\Sortable;
 
 class Todo extends Model
 {
+    // use Sortable;
+
     const STATUS = [
         1 => [ 'label' => '未着手' , 'class' => 'label-danger'],
         2 => [ 'label' => '完了' , 'class' => 'label-success'],
     ];
 
     protected $fillable = ['id','title','status_flag','created_at','updated_at','user_id']; 
+    // public $sortable = ['created_at'];
 
     // protected $guarded = array('id'); 
 
