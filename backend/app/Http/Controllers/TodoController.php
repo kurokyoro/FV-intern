@@ -22,8 +22,22 @@ class TodoController extends Controller
     {
     //　　usersからid取得 -> taskテーブルのuser_idを条件にタスクの取得
     // タスクの登録時にuser_idを格納
+
+        $sort = $request -> get('sort');
         $user_id = \Auth::id();
-        $todos = Todo::whereUser_id($user_id)->get();
+
+        if ($sort) {
+            if($sort === "asc"){
+                $todos = Todo::whereUser_id($user_id)->orderby('created_at')->get();
+            }
+            if($sort === "desc"){
+                $todos = Todo::whereUser_id($user_id)->orderby('created_at','DESC')->get();
+            }
+            else{
+                $todos = Todo::whereUser_id($user_id)->get();
+            }
+        }
+        // $todos = Todo::whereUser_id($user_id)->get();
         return view('todo.index',['todos' => $todos]);
     }
 

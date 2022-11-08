@@ -12,7 +12,7 @@
                                 <a href="/todos/create" class="btn btn-success">作成</a>
                             </th>
                             <th>
-                                <form method="GET">
+                                <form method="GET" >
                                     <button type="submit" name="sort" value="asc" class="btn btn-success">OLD</button>
                                     <button type="submit" name="sort" value="desc" class="btn btn-primary">NEW</button>
                                 </form>

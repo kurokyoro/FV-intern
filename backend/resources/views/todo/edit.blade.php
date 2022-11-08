@@ -17,7 +17,7 @@
                     @method('PUT')
                     <div class="form-group">
                         <label for="id" class="control-lavel">ID</label>
-                        <div>id</div>
+                        <div>{{$todo->id}}</div>
                     </div>
                     <hr>
                     <div class="form-group">
