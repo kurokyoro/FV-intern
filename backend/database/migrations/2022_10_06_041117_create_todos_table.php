@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedInteger('status_flag')->default(1);
             $table->dateTime('created_at')->useCurrent()->nullable();
             $table->dateTime('updated_at')->useCurrent()->nullable();
+            $table->foreignId('user_id')->constrained();
         });
     }
 
