@@ -17,13 +17,19 @@
                                     <button type="submit" name="sort" value="desc" class="btn btn-primary">NEW</button>
                                 </form>
                             </th>
+                            <th>
+                                <form method="GET">
+                                    <button type="submit" name="status" value="1" class="btn btn-success">未着手</button>
+                                    <button type="submit" name="status" value="2" class="btn btn-primary">完了</button>
+                                </form>
+                            </th>
                         </tr>
                     </thead>
                 </table>
 				<table class="table">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            {{-- <th>ID</th> --}}
                             <th>タスク名</th>
                             <th>カテゴリー</th>
                             <th>ステータス</th> 
@@ -36,7 +42,7 @@
                     <tbody id="parent-body">
                         @foreach($todos as $todo)
                             <tr id="parent-{{$todo->id}}">
-                                <td class="child{{$todo->id}}">{{ $todo->id }}</td>
+                                {{-- <td class="child{{$todo->id}}">{{ $todo->id }}</td> --}}
                                 <td class="child{{$todo->id}}" id="child-title-{{$todo->id}}">{{ $todo->title}}</td>
                                 <td></td>
                                 <td><span class="label {{$todo->status_class}}">{{$todo->status_label}}</span></td>
