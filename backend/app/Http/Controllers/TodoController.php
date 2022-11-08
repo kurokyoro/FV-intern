@@ -26,18 +26,19 @@ class TodoController extends Controller
         $sort = $request -> get('sort');
         $status = $request -> get('status');
         $user_id = \Auth::id();
-        $todos = Todo::whereUser_id($user_id);
+        $task = Todo::whereUser_id($user_id);
+        $todos = $task -> get();
         if($status === "1"){
-            $todos = $todos -> where('status_flag', '=', '1') -> get();
+            $todos = $task -> where('status_flag', '=', '1') -> get();
         }
         if($status === "2"){
-            $todos = $todos -> where('status_flag', '=', '2') -> get();
+            $todos = $task -> where('status_flag', '=', '2') -> get();
         }
         if($sort === "asc"){
-            $todos = $todos -> orderby('created_at') -> get();
+            $todos = $task -> orderby('created_at') -> get();
         }
         if($sort === "desc"){
-            $todos = $todos -> orderby('created_at','DESC') -> get();
+            $todos = $task -> orderby('created_at','DESC') -> get();
         }
         // if ($sort) {
         //     if($sort === "asc"){
