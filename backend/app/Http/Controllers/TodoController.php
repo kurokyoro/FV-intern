@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Todo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 
 class TodoController extends Controller
@@ -19,7 +20,10 @@ class TodoController extends Controller
      */
     public function index(Request $request)
     {
-        $todos = Todo::all();
+    //　　usersからid取得 -> taskテーブルのuser_idを条件にタスクの取得
+    // タスクの登録時にuser_idを格納
+        $user_id = \Auth::id();
+        $todos = Todo::whereUser_id($user_id)->get();
         return view('todo.index',['todos' => $todos]);
     }
 
@@ -43,10 +47,13 @@ class TodoController extends Controller
     {
 
         $todo = new Todo();
-        $form = $request -> all();
-        unset($form['_token']);
-
-        $todo->fill($form)->save();
+        $user_id = \Auth::id();
+        // formのデータとuseridを入れる
+        $param = [
+            'title' => $request -> title,
+            'user_id' => $user_id
+        ];
+        DB::insert('insert into todos (title,user_id) values (:title, :user_id)', $param);
 
         return redirect('todos')->with(
             'success',
