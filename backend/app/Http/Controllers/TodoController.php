@@ -93,9 +93,10 @@ class TodoController extends Controller
         // formのデータとuseridを入れる
         $param = [
             'title' => $request -> title,
-            'user_id' => $user_id
+            'user_id' => $user_id,
+            'due_date' => $request -> due_date,
         ];
-        DB::insert('insert into todos (title,user_id) values (:title, :user_id)', $param);
+        DB::insert('insert into todos (title,user_id,due_date) values (:title, :user_id, :due_date)', $param);
 
         return redirect('todos')->with(
             'success',
@@ -114,15 +115,22 @@ class TodoController extends Controller
 
     public function update(Request $request, int $id)
     {
-    
-      $param = [
-        'title' => $request -> title . "【Edited】",
-        'id' => $request -> id
-      ];
+        $task = Todo::find($id);
 
+        $task -> title = $request -> title . "【Edited】";
+        $task -> due_date = $request -> due_date;
+        $task -> save();
     
-      //データベースに保存
-      DB::update('update todos set title = :title where id = :id',$param);
+    //   $param = [
+    //     'title' => $request -> title . "【Edited】",
+    //     'due_date' => $request -> due_date,
+    //     'id' => $request -> id,
+    //   ];
+
+    // //   dd($param['due_date']);
+    
+    //   //データベースに保存
+    //   DB::update('update todos set title = :title and due_date = :due_date where id = :id',$param);
     
       //リダイレクト
       return redirect('/todos');

@@ -51,7 +51,9 @@
                                         <button class="btn btn-success">完了にする</button>
                                     </form>
                                 </td>
-                                <td></td>
+                                <td>
+                                    <span class="">{{$todo -> due_date}}</span>
+                                </td>
                                 <td class="child{{$todo->id}}"><a class="btn btn-success" href="/todos/edit/{{$todo->id}}" id="edit-button-{{$todo->id}}">編集</a></td>
                                 <td class="child{{$todo->id}}">
                                     <form action="/todos/del/{{$todo->id}}" method="GET">

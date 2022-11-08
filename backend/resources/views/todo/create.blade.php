@@ -19,6 +19,11 @@
                         <input class="form-control" name="title" type="text" value="{{ old("title")}}">
                     </div>
                     <hr>
+                    <div class="form-group col-8">
+                        <label for="du_date" class="control-label">期日<span class="badge badge-danger ml-2">{{ __('必須') }}</span></label><br>
+                        <input class="form-control" name="due_date" type="date" value="{{ old("due_date")}}">
+                    </div>
+                    <hr>
                     <button class="btn btn-success" type="submit">登録</button>
                     <a href="{{ route('todo.index') }}" class="btn btn-info">戻る</a>
                 </form>
