@@ -24,19 +24,47 @@ class TodoController extends Controller
     // タスクの登録時にuser_idを格納
 
         $sort = $request -> get('sort');
+        $status = $request -> get('status');
         $user_id = \Auth::id();
-
-        if ($sort) {
-            if($sort === "asc"){
-                $todos = Todo::whereUser_id($user_id)->orderby('created_at')->get();
-            }
-            elseif($sort === "desc"){
-                $todos = Todo::whereUser_id($user_id)->orderby('created_at','DESC')->get();
-            }
-        }else{
-            $todos = Todo::whereUser_id($user_id)->get();
+        $todos = Todo::whereUser_id($user_id);
+        if($status === "1"){
+            $todos = $todos -> where('status_flag', '=', '1') -> get();
         }
-        // $todos = Todo::whereUser_id($user_id)->get();
+        if($status === "2"){
+            $todos = $todos -> where('status_flag', '=', '2') -> get();
+        }
+        if($sort === "asc"){
+            $todos = $todos -> orderby('created_at') -> get();
+        }
+        if($sort === "desc"){
+            $todos = $todos -> orderby('created_at','DESC') -> get();
+        }
+        // if ($sort) {
+        //     if($sort === "asc"){
+        //         $todos = Todo::whereUser_id($user_id)->orderby('created_at')->get();
+        //     }
+        //     elseif($sort === "desc"){
+        //         $todos = Todo::whereUser_id($user_id)->orderby('created_at','DESC')->get();
+        //     }
+        // }elseif($status){
+        //     if($sort === "1"){
+        //         $todos = Todo::whereUser_id($user_id)->where('status_flag', '=', 1)->get();
+        //     }
+        //     elseif($sort === "2"){
+        //         $todos = Todo::whereUser_id($user_id)->where('status_flag', '=', 2)->get();
+        //     }
+        // }else{
+        //     $todos = Todo::whereUser_id($user_id)->get();
+        // }
+        // if($status){
+        //     if($sort === "1"){
+        //         $todos = Todo::whereUser_id($user_id)->where('status_flag', '=', 1)->get();
+        //     }
+        //     elseif($sort === "2"){
+        //             $todos = Todo::whereUser_id($user_id)->where('status_flag', '=', 2)->get();
+        //     }
+        // }
+
         return view('todo.index',['todos' => $todos]);
     }
 

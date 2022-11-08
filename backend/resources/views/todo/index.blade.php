@@ -17,6 +17,12 @@
                                     <button type="submit" name="sort" value="desc" class="btn btn-primary">NEW</button>
                                 </form>
                             </th>
+                            <th>
+                                <form method="GET">
+                                    <button type="submit" name="status" value="1" class="btn btn-success">未着手</button>
+                                    <button type="submit" name="status" value="2" class="btn btn-primary">完了</button>
+                                </form>
+                            </th>
                         </tr>
                     </thead>
                 </table>
