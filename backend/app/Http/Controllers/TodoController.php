@@ -30,12 +30,11 @@ class TodoController extends Controller
             if($sort === "asc"){
                 $todos = Todo::whereUser_id($user_id)->orderby('created_at')->get();
             }
-            if($sort === "desc"){
+            elseif($sort === "desc"){
                 $todos = Todo::whereUser_id($user_id)->orderby('created_at','DESC')->get();
             }
-            else{
-                $todos = Todo::whereUser_id($user_id)->get();
-            }
+        }else{
+            $todos = Todo::whereUser_id($user_id)->get();
         }
         // $todos = Todo::whereUser_id($user_id)->get();
         return view('todo.index',['todos' => $todos]);

@@ -23,7 +23,7 @@
 				<table class="table">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            {{-- <th>ID</th> --}}
                             <th>タスク名</th>
                             <th>カテゴリー</th>
                             <th>ステータス</th> 
@@ -36,7 +36,7 @@
                     <tbody id="parent-body">
                         @foreach($todos as $todo)
                             <tr id="parent-{{$todo->id}}">
-                                <td class="child{{$todo->id}}">{{ $todo->id }}</td>
+                                {{-- <td class="child{{$todo->id}}">{{ $todo->id }}</td> --}}
                                 <td class="child{{$todo->id}}" id="child-title-{{$todo->id}}">{{ $todo->title}}</td>
                                 <td></td>
                                 <td><span class="label {{$todo->status_class}}">{{$todo->status_label}}</span></td>
