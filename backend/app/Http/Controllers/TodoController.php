@@ -74,7 +74,7 @@ class TodoController extends Controller
     {
     
       $param = [
-        'title' => $request -> title,
+        'title' => $request -> title . "【Edited】",
         'id' => $request -> id
       ];
 
