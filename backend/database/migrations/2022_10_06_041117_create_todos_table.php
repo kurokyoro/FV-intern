@@ -21,6 +21,7 @@ return new class extends Migration
             $table->dateTime('updated_at')->useCurrent()->nullable();
             $table->foreignId('user_id')->constrained();
             $table->date('due_date');
+            $table->string('sample_path');
         });
     }
 

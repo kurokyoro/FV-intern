@@ -24,6 +24,11 @@
                         <input class="form-control" name="due_date" type="date" value="{{ old("due_date")}}">
                     </div>
                     <hr>
+                    <div class="form-group col-8">
+                        <label for="image" class="control-label">画像</label><br>
+                        <input class="form-control" name="image" type="file" value="{{ old("image")}}">
+                    </div>
+                    <hr>
                     <button class="btn btn-success" type="submit">登録</button>
                     <a href="{{ route('todo.index') }}" class="btn btn-info">戻る</a>
                 </form>

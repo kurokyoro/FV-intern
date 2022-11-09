@@ -32,6 +32,13 @@
                     </div>
                     
                     <hr>
+                    <div class="form-group">
+                        <label for="image" class="control-label">画像<span class="badge badge-danger ml-2">{{ __('必須') }}</span></label>
+                        <input class="form-control" name="image" type="file" value="">
+                        <input type="hidden" name="old_image" type="text" value="{{ Storage::url($todo->sample_path) }}">
+                    </div>
+                    
+                    <hr>
                     <td><a href="{{ route('todo.index') }}" class="btn btn-success">一覧に戻る</a></td>
                     <button class="btn btn-primary" type="submit">更新</button>
                 </form>
