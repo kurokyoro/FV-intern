@@ -25,6 +25,14 @@
                     </div>
                     <hr>
                     <div class="form-group col-8">
+                        <label for="charge" class="control-label">担当者<span class="badge badge-danger ml-2">{{ __('必須') }}</span></label><br>
+                        <select name="charge" id="" class="form-control">
+                            <option value="" disabled selected style="display: none">--選択してください--</option>
+                            <option value="1">お前</option>
+                        </select>
+                    </div>
+                    <hr>
+                    <div class="form-group col-8">
                         <label for="image" class="control-label">画像</label><br>
                         <input class="form-control" name="image" type="file" value="{{ old("image")}}">
                     </div>

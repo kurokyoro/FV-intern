@@ -35,6 +35,7 @@
                             <th>ステータス</th> 
                             <th>完了ボタン</th>
                             <th>期日</th>
+                            <th>担当者</th>
                             <th>画像</th>
                             <th></th>
                             <th></th>
@@ -54,6 +55,9 @@
                                 </td>
                                 <td>
                                     <span class="">{{$todo -> due_date}}</span>
+                                </td>
+                                <td>
+                                    <span>担当者</span>
                                 </td>
                                 <td>
                                     <img src="{{Storage::url($todo->sample_path)}}" alt="" width="" height="100px">
