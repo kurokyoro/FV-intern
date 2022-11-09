@@ -35,6 +35,7 @@
                             <th>ステータス</th> 
                             <th>完了ボタン</th>
                             <th>期日</th>
+                            <th>画像</th>
                             <th></th>
                             <th></th>
                         </tr>
@@ -53,6 +54,9 @@
                                 </td>
                                 <td>
                                     <span class="">{{$todo -> due_date}}</span>
+                                </td>
+                                <td>
+                                    <img src="{{Storage::url($todo->sample_path)}}" alt="" width="" height="100px">
                                 </td>
                                 <td class="child{{$todo->id}}"><a class="btn btn-success" href="/todos/edit/{{$todo->id}}" id="edit-button-{{$todo->id}}">編集</a></td>
                                 <td class="child{{$todo->id}}">

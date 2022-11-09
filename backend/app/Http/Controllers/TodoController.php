@@ -22,7 +22,7 @@ class TodoController extends Controller
     {
     //　　usersからid取得 -> taskテーブルのuser_idを条件にタスクの取得
     // タスクの登録時にuser_idを格納
-
+        
         $sort = $request -> get('sort');
         $status = $request -> get('status');
         $user_id = \Auth::id();
@@ -87,6 +87,13 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
+        $image_path = $request -> image;
+        if($image_path){
+            $image_path = $image_path -> store('public/sample');
+        }
+        else{
+            $image_path = "";
+        }
 
         $todo = new Todo();
         $user_id = \Auth::id();
@@ -95,8 +102,9 @@ class TodoController extends Controller
             'title' => $request -> title,
             'user_id' => $user_id,
             'due_date' => $request -> due_date,
+            'image_path' => $image_path,
         ];
-        DB::insert('insert into todos (title,user_id,due_date) values (:title, :user_id, :due_date)', $param);
+        DB::insert('insert into todos (title,user_id,due_date,sample_path) values (:title, :user_id, :due_date, :image_path)', $param);
 
         return redirect('todos')->with(
             'success',
@@ -119,6 +127,17 @@ class TodoController extends Controller
 
         $task -> title = $request -> title . "【Edited】";
         $task -> due_date = $request -> due_date;
+        $image = $request -> image;
+        $old_image = $request -> old_image;
+        $old_image = substr($old_image,8);
+        $old_image = "public" . $old_image;
+        // dd($old_image);
+        if($image){
+            $image = $image -> store('public/sample');
+        }else{
+            $image = $old_image;
+        }
+        $task -> sample_path = $image;
         $task -> save();
     
     //   $param = [
