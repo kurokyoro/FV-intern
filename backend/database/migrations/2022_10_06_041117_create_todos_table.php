@@ -22,8 +22,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->date('due_date');
             $table->string('sample_path');
-            $table->string('assign');
-            $table->string('category');
+            $table->unsignedInteger('assign_id');
+            $table->unsignedInteger('category_id');
         });
     }
 
