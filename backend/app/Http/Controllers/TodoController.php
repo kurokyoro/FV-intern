@@ -9,6 +9,7 @@ use App\Models\Category;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use DateTime;
 
 
 class TodoController extends Controller
@@ -24,13 +25,16 @@ class TodoController extends Controller
     {
     //　　usersからid取得 -> taskテーブルのuser_idを条件にタスクの取得
     // タスクの登録時にuser_idを格納
-        
+        $datetime = new DateTime();
+        $datetime = $datetime -> format('Y-m-d');
+        // dd($datetime);
         $sort = $request -> get('sort');
         $status = $request -> get('status');
-
+        $category = $request -> get('category');
+        $categories = Category::all();
         $user_id = \Auth::id();
 
-        $task = Todo::select('todos.id','todos.title','todos.created_at','todos.updated_at','todos.status_flag','todos.user_id','todos.due_date','todos.sample_path','todos.assign_id','category.category','users.name as user_name')
+        $task = Todo::select('todos.id','todos.title','todos.created_at','todos.updated_at','todos.status_flag','todos.user_id','todos.due_date','todos.sample_path','todos.assign_id','category.category','todos.category_id','users.name as user_name')
                     ->join('users', 'todos.assign_id', '=', 'users.id')
                     ->join('category', 'todos.category_id', '=', 'category.id');
 
@@ -50,8 +54,16 @@ class TodoController extends Controller
         if($sort === "desc"){
             $todos = $task -> orderby('created_at','DESC') -> get();
         }
+        if($category){
+            if($category === "0"){
+                $todos = $task -> get();
+            }
+            else{
+                $todos = $task -> where('category_id', '=', $category) -> get();
+            }
+        }
 
-        return view('todo.index',['todos' => $todos]);
+        return view('todo.index',['todos' => $todos,'categories' => $categories,'datetime'=>$datetime]);
     }
 
      /**
