@@ -23,6 +23,7 @@ return new class extends Migration
             $table->date('due_date');
             $table->string('sample_path');
             $table->string('assign');
+            $table->string('category');
         });
     }
 

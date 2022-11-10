@@ -27,6 +27,17 @@
                     
                     <hr>
                     <div class="form-group">
+                        <label for="category" class="control-label">カテゴリー<span class="badge badge-danger ml-2">{{ __('必須') }}</span></label>
+                        <select name="category" id="" class="form-control" required>
+                            <option value="" disabled selected style="display: none">--選択してください--</option>
+                            @foreach($category as $category)
+                                <option value="{{$category->category}}">{{$category->category}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
+                    <hr>
+                    <div class="form-group">
                         <label for="due_date" class="control-label">期日<span class="badge badge-danger ml-2">{{ __('必須') }}</span></label>
                         <input class="form-control" name="due_date" type="date" value="{{ $todo->due_date }}">
                     </div>
@@ -34,8 +45,8 @@
                     <hr>
                     <div class="form-group">
                         <label for="assign" class="control-label">担当者<span class="badge badge-danger ml-2">{{ __('必須') }}</span></label>
-                        <select name="assign" id="" class="form-control" >
-                            <option value="{{$todo->assign}}" disabled selected style="display: none">{{$todo->assign}}</option>
+                        <select name="assign" id="" class="form-control" required >
+                            <option value="" disabled selected style="display: none">--選択してください--</option>
                             @foreach($users as $user)
                                 <option value="{{$user->name}}">{{$user->name}}</option>
                             @endforeach

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Todo;
 use App\Models\User;
+use App\Models\Category;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -82,7 +83,9 @@ class TodoController extends Controller
     public function create()
     {
         $users = User::all();
-        return view('todo.create',['users'=>$users]);
+        $category = Category::all();
+        // dd($category);
+        return view('todo.create',['users'=>$users,'category'=>$category]);
     }
 
     /**
@@ -109,9 +112,10 @@ class TodoController extends Controller
             'user_id' => $user_id,
             'due_date' => $request -> due_date,
             'image_path' => $image_path,
-            'assign' => $request -> assign
+            'assign' => $request -> assign,
+            'category' => $request -> category,
         ];
-        DB::insert('insert into todos (title,user_id,due_date,sample_path,assign) values (:title, :user_id, :due_date, :image_path, :assign)', $param);
+        DB::insert('insert into todos (title,user_id,due_date,sample_path,assign,category) values (:title, :user_id, :due_date, :image_path, :assign, :category)', $param);
 
         return redirect('todos')->with(
             'success',
@@ -124,8 +128,9 @@ class TodoController extends Controller
     public function edit($id)
     {
         $users = User::all();
+        $category = Category::all();
         $todo = DB::table('todos')->find($id);
-        return view('todo.edit',['todo'=>$todo,'users'=>$users]);
+        return view('todo.edit',['todo'=>$todo,'users'=>$users,'category'=>$category]);
     }
 
 
@@ -133,9 +138,12 @@ class TodoController extends Controller
     {
         $task = Todo::find($id);
 
+        // dd($task);
+
         $task -> title = $request -> title . "【Edited】";
         $task -> due_date = $request -> due_date;
         $task -> assign = $request -> assign;
+        $task -> category = $request -> category;
         $image = $request -> image;
         $old_image = $request -> old_image;
         $old_image = substr($old_image,8);
@@ -196,6 +204,16 @@ class TodoController extends Controller
         DB::update('update todos set status_flag = 2 where id = :id', $param);
         return redirect('/todos');
         
+    }
+
+    public function category(){
+        return view('todo.category');
+    }
+
+    public function create_category(Request $request){
+        $category = $request -> category;
+        DB::insert('insert into category (category) values (?)', [$category]);
+        return redirect('/todos');
     }
 
 }
