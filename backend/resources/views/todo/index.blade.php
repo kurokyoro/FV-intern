@@ -56,9 +56,12 @@
                                 <td>{{$todo->category}}</td>
                                 <td><span class="label {{$todo->status_class}}">{{$todo->status_label}}</span></td>
                                 <td>
+                                    @if($todo->status_flag === 1)
                                     <form action="todos/status/{{$todo->id}}" method="GET">
                                         <button class="btn btn-success">完了にする</button>
                                     </form>
+                                    @else
+                                    @endif
                                 </td>
                                 <td>
                                     <span class="">{{$todo -> due_date}}</span>
