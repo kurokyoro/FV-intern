@@ -20,6 +20,16 @@
                     </div>
                     <hr>
                     <div class="form-group col-8">
+                        <label for="category" class="control-label">カテゴリー<span class="badge badge-danger ml-2">{{ __('必須') }}</span></label><br>
+                        <select name="category" id="" class="form-control">
+                            <option value="" disabled selected style="display: none">--選択してください--</option>
+                            @foreach($category as $category)
+                                <option value="{{$category->category}}">{{$category->category}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <hr>
+                    <div class="form-group col-8">
                         <label for="du_date" class="control-label">期日<span class="badge badge-danger ml-2">{{ __('必須') }}</span></label><br>
                         <input class="form-control" name="due_date" type="date" value="{{ old("due_date")}}">
                     </div>

@@ -23,6 +23,13 @@
                                     <button type="submit" name="status" value="2" class="btn btn-primary">完了</button>
                                 </form>
                             </th>
+                            <th>
+                                <form action="todos/category/" method="GET">
+                                    <button type="submit" class="btn btn-success">
+                                        カテゴリー登録
+                                    </button>
+                                </form>
+                            </th>
                         </tr>
                     </thead>
                 </table>
@@ -46,7 +53,7 @@
                             <tr id="parent-{{$todo->id}}">
                                 {{-- <td class="child{{$todo->id}}">{{ $todo->id }}</td> --}}
                                 <td class="child{{$todo->id}}" id="child-title-{{$todo->id}}">{{ $todo->title}}</td>
-                                <td></td>
+                                <td>{{$todo->category}}</td>
                                 <td><span class="label {{$todo->status_class}}">{{$todo->status_label}}</span></td>
                                 <td>
                                     <form action="todos/status/{{$todo->id}}" method="GET">
