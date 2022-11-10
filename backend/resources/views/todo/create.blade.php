@@ -19,6 +19,36 @@
                         <input class="form-control" name="title" type="text" value="{{ old("title")}}">
                     </div>
                     <hr>
+                    <div class="form-group col-8">
+                        <label for="category" class="control-label">カテゴリー<span class="badge badge-danger ml-2">{{ __('必須') }}</span></label><br>
+                        <select name="category" id="" class="form-control">
+                            <option value="" disabled selected style="display: none">--選択してください--</option>
+                            @foreach($category as $category)
+                                <option value="{{$category->category}}">{{$category->category}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <hr>
+                    <div class="form-group col-8">
+                        <label for="du_date" class="control-label">期日<span class="badge badge-danger ml-2">{{ __('必須') }}</span></label><br>
+                        <input class="form-control" name="due_date" type="date" value="{{ old("due_date")}}">
+                    </div>
+                    <hr>
+                    <div class="form-group col-8">
+                        <label for="charge" class="control-label">担当者<span class="badge badge-danger ml-2">{{ __('必須') }}</span></label><br>
+                        <select name="assign" id="" class="form-control">
+                            <option value="" disabled selected style="display: none">--選択してください--</option>
+                            @foreach($users as $user)
+                                <option value="{{$user->name}}">{{$user->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <hr>
+                    <div class="form-group col-8">
+                        <label for="image" class="control-label">画像</label><br>
+                        <input class="form-control" name="image" type="file" value="{{ old("image")}}">
+                    </div>
+                    <hr>
                     <button class="btn btn-success" type="submit">登録</button>
                     <a href="{{ route('todo.index') }}" class="btn btn-info">戻る</a>
                 </form>

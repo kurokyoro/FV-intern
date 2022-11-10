@@ -16,8 +16,14 @@ return new class extends Migration
         Schema::create('todos', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('title');
+            $table->unsignedInteger('status_flag')->default(1);
             $table->dateTime('created_at')->useCurrent()->nullable();
             $table->dateTime('updated_at')->useCurrent()->nullable();
+            $table->foreignId('user_id')->constrained();
+            $table->date('due_date');
+            $table->string('sample_path');
+            $table->string('assign');
+            $table->string('category');
         });
     }
 
