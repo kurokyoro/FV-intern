@@ -30,6 +30,21 @@
                                     </button>
                                 </form>
                             </th>
+                            <th>
+                                
+                                <form action="" method="GET">
+                                    <div style="display: flex;">
+                                    <select name="category" id="" class="form-control" style="width:70%;margin-right:10px;">
+                                        <option value="" disabled selected style="display: none">--カテゴリーで絞り込み--</option>
+                                        <option value="0">すべて表示</option>
+                                        @foreach($categories as $category)
+                                            <option value="{{$category->id}}">{{$category->category}}</option>
+                                        @endforeach
+                                    </select>
+                                    <button type="submit" class="btn" style="border: 1.5px #ced4da solid;background-color:#f8fafc;">絞り込み</button>
+                                    </div>
+                                </form>
+                            </th>
                         </tr>
                     </thead>
                 </table>
@@ -50,6 +65,37 @@
                     </thead>
                     <tbody id="parent-body">
                         @foreach($todos as $todo)
+                        @if($datetime > $todo->due_date)
+                            <tr id="parent-{{$todo->id}}" style="background-color: #fbbbc2">
+                                {{-- <td class="child{{$todo->id}}">{{ $todo->id }}</td> --}}
+                                <td class="child{{$todo->id}}" id="child-title-{{$todo->id}}">{{ $todo->title}}</td>
+                                <td>{{$todo->category}}</td>
+                                <td><span class="label {{$todo->status_class}}">{{$todo->status_label}}</span></td>
+                                <td>
+                                    @if($todo->status_flag === 1)
+                                    <form action="todos/status/{{$todo->id}}" method="GET">
+                                        <button class="btn btn-success">完了にする</button>
+                                    </form>
+                                    @else
+                                    @endif
+                                </td>
+                                <td>
+                                    <span class="">{{$todo -> due_date}}</span>
+                                </td>
+                                <td>
+                                    <span>{{$todo->user_name}}</span>
+                                </td>
+                                <td>
+                                    <img src="{{Storage::url($todo->sample_path)}}" alt="" width="" height="100px">
+                                </td>
+                                <td class="child{{$todo->id}}"><a class="btn btn-success" href="/todos/edit/{{$todo->id}}" id="edit-button-{{$todo->id}}">編集</a></td>
+                                <td class="child{{$todo->id}}">
+                                    <form action="/todos/del/{{$todo->id}}" method="GET">
+                                        <button type="submit" class="btn btn-danger" name="del-btn">削除</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @else
                             <tr id="parent-{{$todo->id}}">
                                 {{-- <td class="child{{$todo->id}}">{{ $todo->id }}</td> --}}
                                 <td class="child{{$todo->id}}" id="child-title-{{$todo->id}}">{{ $todo->title}}</td>
@@ -67,7 +113,7 @@
                                     <span class="">{{$todo -> due_date}}</span>
                                 </td>
                                 <td>
-                                    <span>{{$todo -> assign}}</span>
+                                    <span>{{$todo->user_name}}</span>
                                 </td>
                                 <td>
                                     <img src="{{Storage::url($todo->sample_path)}}" alt="" width="" height="100px">
@@ -79,6 +125,7 @@
                                     </form>
                                 </td>
                             </tr>
+                            @endif
                         @endforeach
                     </tbody>
                 </table>

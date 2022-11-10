@@ -9,6 +9,7 @@ use App\Models\Category;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use DateTime;
 
 
 class TodoController extends Controller
@@ -24,17 +25,25 @@ class TodoController extends Controller
     {
     //　　usersからid取得 -> taskテーブルのuser_idを条件にタスクの取得
     // タスクの登録時にuser_idを格納
-        
+        $datetime = new DateTime();
+        $datetime = $datetime -> format('Y-m-d');
+        // dd($datetime);
         $sort = $request -> get('sort');
         $status = $request -> get('status');
-
+        $category = $request -> get('category');
+        $categories = Category::all();
         $user_id = \Auth::id();
 
-        $task = Todo::whereUser_id($user_id);
+        $task = Todo::select('todos.id','todos.title','todos.created_at','todos.updated_at','todos.status_flag','todos.user_id','todos.due_date','todos.sample_path','todos.assign_id','category.category','todos.category_id','users.name as user_name')
+                    ->join('users', 'todos.assign_id', '=', 'users.id')
+                    ->join('category', 'todos.category_id', '=', 'category.id');
 
         $todos = $task -> get();
+        // dd($todos);
         if($status === "1"){
             $todos = $task -> where('status_flag', '=', '1') -> get();
+            // $todos = Todo::whereUser_id($user_id) -> where('status_flag', '=', '1') -> get();
+            
         }
         if($status === "2"){
             $todos = $task -> where('status_flag', '=', '2') -> get();
@@ -45,34 +54,16 @@ class TodoController extends Controller
         if($sort === "desc"){
             $todos = $task -> orderby('created_at','DESC') -> get();
         }
-        // if ($sort) {
-        //     if($sort === "asc"){
-        //         $todos = Todo::whereUser_id($user_id)->orderby('created_at')->get();
-        //     }
-        //     elseif($sort === "desc"){
-        //         $todos = Todo::whereUser_id($user_id)->orderby('created_at','DESC')->get();
-        //     }
-        // }elseif($status){
-        //     if($sort === "1"){
-        //         $todos = Todo::whereUser_id($user_id)->where('status_flag', '=', 1)->get();
-        //     }
-        //     elseif($sort === "2"){
-        //         $todos = Todo::whereUser_id($user_id)->where('status_flag', '=', 2)->get();
-        //     }
-        // }else{
-        //     $todos = Todo::whereUser_id($user_id)->get();
-        // }
-        // if($status){
-        //     if($sort === "1"){
-        //         $todos = Todo::whereUser_id($user_id)->where('status_flag', '=', 1)->get();
-        //     }
-        //     elseif($sort === "2"){
-        //             $todos = Todo::whereUser_id($user_id)->where('status_flag', '=', 2)->get();
-        //     }
-        // }
-        // dd($todos);
+        if($category){
+            if($category === "0"){
+                $todos = $task -> get();
+            }
+            else{
+                $todos = $task -> where('category_id', '=', $category) -> get();
+            }
+        }
 
-        return view('todo.index',['todos' => $todos]);
+        return view('todo.index',['todos' => $todos,'categories' => $categories,'datetime'=>$datetime]);
     }
 
      /**
@@ -83,9 +74,9 @@ class TodoController extends Controller
     public function create()
     {
         $users = User::all();
-        $category = Category::all();
+        $categories = Category::all();
         // dd($category);
-        return view('todo.create',['users'=>$users,'category'=>$category]);
+        return view('todo.create',['users'=>$users,'categories'=>$categories]);
     }
 
     /**
@@ -115,7 +106,7 @@ class TodoController extends Controller
             'assign' => $request -> assign,
             'category' => $request -> category,
         ];
-        DB::insert('insert into todos (title,user_id,due_date,sample_path,assign,category) values (:title, :user_id, :due_date, :image_path, :assign, :category)', $param);
+        DB::insert('insert into todos (title,user_id,due_date,sample_path,assign_id,category_id) values (:title, :user_id, :due_date, :image_path, :assign, :category)', $param);
 
         return redirect('todos')->with(
             'success',
@@ -128,9 +119,9 @@ class TodoController extends Controller
     public function edit($id)
     {
         $users = User::all();
-        $category = Category::all();
+        $categories = Category::all();
         $todo = DB::table('todos')->find($id);
-        return view('todo.edit',['todo'=>$todo,'users'=>$users,'category'=>$category]);
+        return view('todo.edit',['todo'=>$todo,'users'=>$users,'categories'=>$categories]);
     }
 
 
@@ -142,8 +133,8 @@ class TodoController extends Controller
 
         $task -> title = $request -> title . "【Edited】";
         $task -> due_date = $request -> due_date;
-        $task -> assign = $request -> assign;
-        $task -> category = $request -> category;
+        $task -> assign_id = $request -> assign;
+        $task -> category_id = $request -> category;
         $image = $request -> image;
         $old_image = $request -> old_image;
         $old_image = substr($old_image,8);

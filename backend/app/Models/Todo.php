@@ -15,7 +15,7 @@ class Todo extends Model
         2 => [ 'label' => '完了' , 'class' => 'label-success'],
     ];
 
-    protected $fillable = ['id','title','status_flag','created_at','updated_at','user_id','due_date']; 
+    protected $fillable = ['id','title','status_flag','created_at','updated_at','user_id','due_date','assign_flag','category_id']; 
     // public $sortable = ['created_at'];
 
     // protected $guarded = array('id'); 
