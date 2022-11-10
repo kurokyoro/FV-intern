@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Todo;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -25,8 +26,11 @@ class TodoController extends Controller
         
         $sort = $request -> get('sort');
         $status = $request -> get('status');
+
         $user_id = \Auth::id();
+
         $task = Todo::whereUser_id($user_id);
+
         $todos = $task -> get();
         if($status === "1"){
             $todos = $task -> where('status_flag', '=', '1') -> get();
@@ -65,6 +69,7 @@ class TodoController extends Controller
         //             $todos = Todo::whereUser_id($user_id)->where('status_flag', '=', 2)->get();
         //     }
         // }
+        // dd($todos);
 
         return view('todo.index',['todos' => $todos]);
     }
@@ -76,7 +81,8 @@ class TodoController extends Controller
      */
     public function create()
     {
-        return view('todo.create');
+        $users = User::all();
+        return view('todo.create',['users'=>$users]);
     }
 
     /**
@@ -103,8 +109,9 @@ class TodoController extends Controller
             'user_id' => $user_id,
             'due_date' => $request -> due_date,
             'image_path' => $image_path,
+            'assign' => $request -> assign
         ];
-        DB::insert('insert into todos (title,user_id,due_date,sample_path) values (:title, :user_id, :due_date, :image_path)', $param);
+        DB::insert('insert into todos (title,user_id,due_date,sample_path,assign) values (:title, :user_id, :due_date, :image_path, :assign)', $param);
 
         return redirect('todos')->with(
             'success',
@@ -116,8 +123,9 @@ class TodoController extends Controller
     
     public function edit($id)
     {
+        $users = User::all();
         $todo = DB::table('todos')->find($id);
-        return view('todo.edit',['todo'=>$todo]);
+        return view('todo.edit',['todo'=>$todo,'users'=>$users]);
     }
 
 
@@ -127,6 +135,7 @@ class TodoController extends Controller
 
         $task -> title = $request -> title . "【Edited】";
         $task -> due_date = $request -> due_date;
+        $task -> assign = $request -> assign;
         $image = $request -> image;
         $old_image = $request -> old_image;
         $old_image = substr($old_image,8);

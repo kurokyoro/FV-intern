@@ -57,7 +57,7 @@
                                     <span class="">{{$todo -> due_date}}</span>
                                 </td>
                                 <td>
-                                    <span>担当者</span>
+                                    <span>{{$todo -> assign}}</span>
                                 </td>
                                 <td>
                                     <img src="{{Storage::url($todo->sample_path)}}" alt="" width="" height="100px">

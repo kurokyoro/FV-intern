@@ -22,7 +22,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->date('due_date');
             $table->string('sample_path');
-            $table->unsignedInteger('charge_id')->default(0);
+            $table->string('assign');
         });
     }
 

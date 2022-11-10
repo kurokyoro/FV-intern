@@ -33,6 +33,17 @@
                     
                     <hr>
                     <div class="form-group">
+                        <label for="assign" class="control-label">担当者<span class="badge badge-danger ml-2">{{ __('必須') }}</span></label>
+                        <select name="assign" id="" class="form-control" >
+                            <option value="{{$todo->assign}}" disabled selected style="display: none">{{$todo->assign}}</option>
+                            @foreach($users as $user)
+                                <option value="{{$user->name}}">{{$user->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
+                    <hr>
+                    <div class="form-group">
                         <label for="image" class="control-label">画像<span class="badge badge-danger ml-2">{{ __('必須') }}</span></label>
                         <input class="form-control" name="image" type="file" value="">
                         <input type="hidden" name="old_image" type="text" value="{{ Storage::url($todo->sample_path) }}">

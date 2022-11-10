@@ -26,9 +26,11 @@
                     <hr>
                     <div class="form-group col-8">
                         <label for="charge" class="control-label">担当者<span class="badge badge-danger ml-2">{{ __('必須') }}</span></label><br>
-                        <select name="charge" id="" class="form-control">
+                        <select name="assign" id="" class="form-control">
                             <option value="" disabled selected style="display: none">--選択してください--</option>
-                            <option value="1">お前</option>
+                            @foreach($users as $user)
+                                <option value="{{$user->name}}">{{$user->name}}</option>
+                            @endforeach
                         </select>
                     </div>
                     <hr>
