@@ -242,8 +242,29 @@ class TodoController extends Controller
 
         DB::insert('insert into comment (comment, todo_id) values (:comment, :todo_id)', $param);
 
-        // DB::delete('delete comment ');
+        // $task = Todo::select('todos.id','todos.title','todos.status_flag','todos.due_date','todos.sample_path','category.category','users.name as user_name')
+        // ->join('users', 'todos.assign_id', '=', 'users.id')
+        // ->join('category', 'todos.category_id', '=', 'category.id')
+        // ->where('todos.id', '=', $id)
+        // ->first();
 
+        // $comments = Comment::select('comment.comment')
+        // ->join('todos', 'comment.todo_id', '=', 'todos.id')
+        // ->get();
+
+
+        return redirect('/todos');
+    }
+
+    public function categoryList(){
+        $categories = Category::all();
+        return view('todo.categoryList',['categories'=>$categories]);
+    }
+
+    public function delCategory($id,Request $request){
+        $category_id = $id;
+        DB::update('update todos set category_id = 1 where category_id = ?', [$category_id]);
+        DB::delete('delete from category where id = ?', [$category_id]);
         return redirect('/todos');
     }
 
