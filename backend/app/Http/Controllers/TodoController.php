@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Todo;
 use App\Models\User;
 use App\Models\Category;
-use App\Models\Coment;
+use App\Models\Comment;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -225,20 +225,26 @@ class TodoController extends Controller
         ->where('todos.id', '=', $id)
         ->first();
         // dd($task);s
-        $coments = Coment::select('coment.coment')
-        ->join('taskComent', 'coment.id', '=', 'taskComent.coment_id')
-        ->join('todos', 'taskComent.task_id', '=', 'todos.id')
+        $comments = Comment::select('comment.comment')
+        ->join('todos', 'comment.todo_id', '=', 'todos.id')
         ->get();
-
-        if($posts){
-            // $post_coment = Todo::find($id);
-            $post_coment = $request -> coment;
-            DB::insert('insert into coment (coment) values (?)', $post_coment);
-
-        }
         
 
-        return view('todo.detail',['todo'=>$task,'coments'=>$coments]);
+        return view('todo.detail',['todo'=>$task,'comments'=>$comments]);
+    }
+
+    public function insertComment($id,Request $request){
+        $task_id = $id;
+        $param = [
+            'comment' => $request -> comment,
+            'todo_id' => $task_id,
+        ];
+
+        DB::insert('insert into comment (comment, todo_id) values (:comment, :todo_id)', $param);
+
+        // DB::delete('delete comment ');
+
+        return redirect('/todos');
     }
 
 }

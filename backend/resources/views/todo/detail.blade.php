@@ -39,13 +39,14 @@
                         <img src="{{Storage::url($todo->sample_path)}}" alt="陽気なオウム" width="300px">
                     </div>
                     <hr>
-                    {{-- @foreach($coments as $coment)
-                    <p>{{$coment->coment}}</p>
-                    @endforeach --}}
-                    <form action="" method="GET">
+                    <label for="comment" class="control-label">コメント</label><br>
+                    @foreach($comments as $comment)
+                    <p style="margin:0 0 0 10px;font-size:16px;">{{$comment->comment}}</p>
+                    @endforeach
+                    <form action="/todos/{{$todo->id}}/comment" method="POST">
                         @csrf
-                        <input type="text" class="form-control" name="coment">
-                        <button type="submit" class="btn btn-success" name="posts">投稿</button>
+                        <input type="text" class="form-control" name="comment">
+                        <button type="submit" class="btn btn-success" name="posts" style="margin-top: 5px;">投稿</button>
                     </form>
                     <hr>
                     <a href="{{ route('todo.index') }}" class="btn btn-info">戻る</a>

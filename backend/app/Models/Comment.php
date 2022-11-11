@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Coment extends Model
+class Comment extends Model
 {
     use HasFactory;
-    protected $table = "coment";
-    protected $fillable = ['id','coment']; 
+    protected $table = "comment";
+    protected $fillable = ['id','comment']; 
     public function todos(){
         return $this->belongsToMany(Todo::class);
     }

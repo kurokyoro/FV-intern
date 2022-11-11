@@ -13,9 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('coment', function (Blueprint $table) {
+        Schema::create('comment', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('coment');
+            $table->string('comment');
+            $table->unsignedInteger('todo_id');
         });
     }
 
