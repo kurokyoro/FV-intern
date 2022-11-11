@@ -20,8 +20,8 @@
                     </div>
                     <hr>
                     <button class="btn btn-success" type="submit">登録</button>
-                    <a href="{{ route('todo.index') }}" class="btn btn-info">戻る</a>
                 </form>
+                    <a href="{{ route('todo.index') }}" class="btn btn-info">戻る</a>
             </div>
         </div>
     </div>

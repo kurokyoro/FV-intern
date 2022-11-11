@@ -35,6 +35,13 @@
                                 </form>
                             </th>
                             <th>
+                                <form action="todos/category/del" method="GET">
+                                    <button type="submit" class="btn btn-success">
+                                        カテゴリー一覧
+                                    </button>
+                                </form>
+                            </th>
+                            <th>
                                 <form action="todos/category/" method="GET">
                                     <button type="submit" class="btn btn-success">
                                         カテゴリー登録
