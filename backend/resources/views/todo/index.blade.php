@@ -77,9 +77,9 @@
                     <tbody id="parent-body">
                         @foreach($todos as $todo)
                         @if($datetime > $todo->due_date)
-                            <tr id="parent-{{$todo->id}}" style="background-color: #fbbbc2">
+                            <tr id="parent-{{$todo->id}}" style="background-color: #ffe3e6">
                                 {{-- <td class="child{{$todo->id}}">{{ $todo->id }}</td> --}}
-                                <td class="child{{$todo->id}}" id="child-title-{{$todo->id}}">{{ $todo->title}}</td>
+                                <td class="child{{$todo->id}}" id="child-title-{{$todo->id}}"><a href="/todos/task/{{$todo->id}}"style="color: black;text-decoration:none;" onMouseOver="this.style.color='#277fff'" onMouseOut="this.style.color='black'">{{ $todo->title}}</a></td>
                                 <td>{{$todo->category}}</td>
                                 <td><span class="label {{$todo->status_class}}">{{$todo->status_label}}</span></td>
                                 <td>
@@ -109,7 +109,7 @@
                         @else
                             <tr id="parent-{{$todo->id}}">
                                 {{-- <td class="child{{$todo->id}}">{{ $todo->id }}</td> --}}
-                                <td class="child{{$todo->id}}" id="child-title-{{$todo->id}}">{{ $todo->title}}</td>
+                                <td class="child{{$todo->id}}" id="child-title-{{$todo->id}}"><a href="/todos/task/{{$todo->id}}" style="color: black;text-decoration:none;" onMouseOver="this.style.color='#277fff'" onMouseOut="this.style.color='black'">{{ $todo->title}}</a></td>
                                 <td>{{$todo->category}}</td>
                                 <td><span class="label {{$todo->status_class}}">{{$todo->status_label}}</span></td>
                                 <td>

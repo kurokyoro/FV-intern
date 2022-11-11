@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Todo;
 use App\Models\User;
 use App\Models\Category;
+use App\Models\Coment;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -212,6 +213,32 @@ class TodoController extends Controller
         $category = $request -> category;
         DB::insert('insert into category (category) values (?)', [$category]);
         return redirect('/todos');
+    }
+
+    public function detail($id, Request $request){
+        // $task = Todo::find($id);
+        $posts = $request -> get('posts'); 
+
+        $task = Todo::select('todos.id','todos.title','todos.status_flag','todos.due_date','todos.sample_path','category.category','users.name as user_name')
+        ->join('users', 'todos.assign_id', '=', 'users.id')
+        ->join('category', 'todos.category_id', '=', 'category.id')
+        ->where('todos.id', '=', $id)
+        ->first();
+        // dd($task);s
+        $coments = Coment::select('coment.coment')
+        ->join('taskComent', 'coment.id', '=', 'taskComent.coment_id')
+        ->join('todos', 'taskComent.task_id', '=', 'todos.id')
+        ->get();
+
+        if($posts){
+            // $post_coment = Todo::find($id);
+            $post_coment = $request -> coment;
+            DB::insert('insert into coment (coment) values (?)', $post_coment);
+
+        }
+        
+
+        return view('todo.detail',['todo'=>$task,'coments'=>$coments]);
     }
 
 }

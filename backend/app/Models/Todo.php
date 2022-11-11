@@ -55,4 +55,8 @@ class Todo extends Model
         return self::STATUS[$status]['class'];
     }
 
+    public function coments(){
+        return $this->belongsToMany(Coment::class);
+    }
+
 }
