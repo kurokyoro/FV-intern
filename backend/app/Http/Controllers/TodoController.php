@@ -34,9 +34,16 @@ class TodoController extends Controller
         $categories = Category::all();
         $user_id = \Auth::id();
 
+         // キーワード取得
+        $keyword = $request->input('keyword', ''); // デフォルトは空文字
+
+        //キーワード検索
+        // $posts = Post::where('title', 'LIKE' , "%{$keyword}%")->get()->all();
+
         $task = Todo::select('todos.id','todos.title','todos.created_at','todos.updated_at','todos.status_flag','todos.user_id','todos.due_date','todos.sample_path','todos.assign_id','category.category','todos.category_id','users.name as user_name')
                     ->join('users', 'todos.assign_id', '=', 'users.id')
-                    ->join('category', 'todos.category_id', '=', 'category.id');
+                    ->join('category', 'todos.category_id', '=', 'category.id')
+                    ->where('title', 'LIKE', "%{$keyword}%");
 
         $todos = $task -> get();
         // dd($todos);
@@ -63,7 +70,7 @@ class TodoController extends Controller
             }
         }
 
-        return view('todo.index',['todos' => $todos,'categories' => $categories,'datetime'=>$datetime]);
+        return view('todo.index',['todos' => $todos,'categories' => $categories,'datetime'=>$datetime,'keyword'=>$keyword]);
     }
 
      /**

@@ -9,6 +9,17 @@
                     <thead>
                         <tr>
                             <th>
+                                <form action="" method="GET">
+                                    <div style="display: flex; ">
+                                        <input name="keyword" class="form-control" type="text" style="width: 60%" placeholder="{{$keyword}}">
+                                        <button type="submit" class="btn" style="border: 1.5px #ced4da solid;background-color:#f8fafc;">タスク検索</button>
+                                        <button type="submit" class="btn" style="border: 1.5px #ced4da solid;background-color:#f8fafc;">クリア</button>
+                                    </div>
+                                    </form>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>
                                 <a href="/todos/create" class="btn btn-success">作成</a>
                             </th>
                             <th>
