@@ -33,9 +33,10 @@ Route::group(['middleware' => 'auth'], function() {
     Route::put('/todos/del/{id}', [App\Http\Controllers\TodoController::class, 'del']);
     Route::get('/todos/status/{id}', [App\Http\Controllers\TodoController::class, 'status_check'])->name('todo.status');
     Route::post('/todos/status/{id}', [App\Http\Controllers\TodoController::class, 'status_change']);
-    Route::get('/todos/category',[App\Http\Controllers\TodoController::class, 'category'])->name('rodo.category');
+    Route::get('/todos/category',[App\Http\Controllers\TodoController::class, 'category'])->name('todo.category');
     Route::post('/todos/category',[App\Http\Controllers\TodoController::class, 'create_category']);
-
+    Route::get('/todos/task/{id}',[App\Http\Controllers\TodoController::class, 'detail'])->name('todo.detail');
+    Route::post('/todos/{id}/comment',[App\Http\Controllers\TodoController::class, 'insertComment']);
 
 });
 

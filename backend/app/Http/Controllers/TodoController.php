@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Todo;
 use App\Models\User;
 use App\Models\Category;
+use App\Models\Comment;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -211,6 +212,38 @@ class TodoController extends Controller
     public function create_category(Request $request){
         $category = $request -> category;
         DB::insert('insert into category (category) values (?)', [$category]);
+        return redirect('/todos');
+    }
+
+    public function detail($id, Request $request){
+        // $task = Todo::find($id);
+        $posts = $request -> get('posts'); 
+
+        $task = Todo::select('todos.id','todos.title','todos.status_flag','todos.due_date','todos.sample_path','category.category','users.name as user_name')
+        ->join('users', 'todos.assign_id', '=', 'users.id')
+        ->join('category', 'todos.category_id', '=', 'category.id')
+        ->where('todos.id', '=', $id)
+        ->first();
+        // dd($task);s
+        $comments = Comment::select('comment.comment')
+        ->join('todos', 'comment.todo_id', '=', 'todos.id')
+        ->get();
+        
+
+        return view('todo.detail',['todo'=>$task,'comments'=>$comments]);
+    }
+
+    public function insertComment($id,Request $request){
+        $task_id = $id;
+        $param = [
+            'comment' => $request -> comment,
+            'todo_id' => $task_id,
+        ];
+
+        DB::insert('insert into comment (comment, todo_id) values (:comment, :todo_id)', $param);
+
+        // DB::delete('delete comment ');
+
         return redirect('/todos');
     }
 
