@@ -17,9 +17,9 @@
                     <div class="form-group col-8">
                         <label for="category" class="control-label">カテゴリー名<span class="badge badge-danger ml-2">{{ __('必須') }}</span></label><br>
                         <input class="form-control" name="category" type="text" value="">
+                        <button class="btn btn-success" type="submit" style="margin-top: 10px">登録</button>
                     </div>
                     <hr>
-                    <button class="btn btn-success" type="submit">登録</button>
                 </form>
                     <a href="{{ route('todo.index') }}" class="btn btn-info">戻る</a>
             </div>

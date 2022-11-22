@@ -42,7 +42,7 @@
                                 </form>
                             </th>
                             <th>
-                                <form action="todos/category/" method="GET">
+                                <form action="/todos/category" method="GET">
                                     <button type="submit" class="btn btn-success">
                                         カテゴリー登録
                                     </button>

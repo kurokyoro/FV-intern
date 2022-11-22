@@ -11,12 +11,14 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use DateTime;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TestMail;
+use App\Mail\AssignMail;
+use App\Mail\ChangeMail;
 
 
 class TodoController extends Controller
-{
-
-    
+{   
     /**
      * Display a listing of the resource.
      *
@@ -24,34 +26,23 @@ class TodoController extends Controller
      */
     public function index(Request $request)
     {
-    //　　usersからid取得 -> taskテーブルのuser_idを条件にタスクの取得
-    // タスクの登録時にuser_idを格納
         $datetime = new DateTime();
         $datetime = $datetime -> format('Y-m-d');
-        // dd($datetime);
         $sort = $request -> get('sort');
         $status = $request -> get('status');
         $category = $request -> get('category');
         $categories = Category::all();
         $user_id = \Auth::id();
-
-         // キーワード取得
-        $keyword = $request->input('keyword', ''); // デフォルトは空文字
-
-        //キーワード検索
-        // $posts = Post::where('title', 'LIKE' , "%{$keyword}%")->get()->all();
+        $keyword = $request->input('keyword', '');
 
         $task = Todo::select('todos.id','todos.title','todos.created_at','todos.updated_at','todos.status_flag','todos.user_id','todos.due_date','todos.sample_path','todos.assign_id','category.category','todos.category_id','users.name as user_name')
                     ->join('users', 'todos.assign_id', '=', 'users.id')
                     ->join('category', 'todos.category_id', '=', 'category.id')
                     ->where('title', 'LIKE', "%{$keyword}%");
-
         $todos = $task -> get();
-        // dd($todos);
+
         if($status === "1"){
-            $todos = $task -> where('status_flag', '=', '1') -> get();
-            // $todos = Todo::whereUser_id($user_id) -> where('status_flag', '=', '1') -> get();
-            
+            $todos = $task -> where('status_flag', '=', '1') -> get();    
         }
         if($status === "2"){
             $todos = $task -> where('status_flag', '=', '2') -> get();
@@ -70,7 +61,6 @@ class TodoController extends Controller
                 $todos = $task -> where('category_id', '=', $category) -> get();
             }
         }
-
         return view('todo.index',['todos' => $todos,'categories' => $categories,'datetime'=>$datetime,'keyword'=>$keyword]);
     }
 
@@ -83,7 +73,6 @@ class TodoController extends Controller
     {
         $users = User::all();
         $categories = Category::all();
-        // dd($category);
         return view('todo.create',['users'=>$users,'categories'=>$categories]);
     }
 
@@ -103,9 +92,14 @@ class TodoController extends Controller
             $image_path = "";
         }
 
+        $user_id = $request -> assign;
+        $user = DB::table('users')->select('name', 'email')->find($user_id);
+        $name = $user -> name;
+        $email = $user -> email;
+        Mail::send(new AssignMail($name, $email));
+
         $todo = new Todo();
         $user_id = \Auth::id();
-        // formのデータとuseridを入れる
         $param = [
             'title' => $request -> title,
             'user_id' => $user_id,
@@ -122,8 +116,6 @@ class TodoController extends Controller
         );
     }
 
-
-    
     public function edit($id)
     {
         $users = User::all();
@@ -132,13 +124,10 @@ class TodoController extends Controller
         return view('todo.edit',['todo'=>$todo,'users'=>$users,'categories'=>$categories]);
     }
 
-
     public function update(Request $request, int $id)
     {
         $task = Todo::find($id);
-
-        // dd($task);
-
+        $user_id = $task -> assign_id;
         $task -> title = $request -> title . "【Edited】";
         $task -> due_date = $request -> due_date;
         $task -> assign_id = $request -> assign;
@@ -147,7 +136,25 @@ class TodoController extends Controller
         $old_image = $request -> old_image;
         $old_image = substr($old_image,8);
         $old_image = "public" . $old_image;
-        // dd($old_image);
+        $user_id_edited = $task -> assign_id;
+        // mail送信設定
+        if($user_id == $user_id_edited){
+            $user = DB::table('users')->select('name', 'email')->find($user_id);
+            $name = $user -> name;
+            $email = $user -> email;
+            Mail::send(new TestMail($name, $email));
+        }
+        else{
+            $user = DB::table('users')->select('name', 'email')->find($user_id);
+            $name = $user -> name;
+            $email = $user -> email;
+            Mail::send(new ChangeMail($name, $email));
+            $user = DB::table('users')->select('name', 'email')->find($user_id_edited);
+            $name = $user -> name;
+            $email = $user -> email;
+            Mail::send(new AssignMail($name, $email));
+        }
+
         if($image){
             $image = $image -> store('public/sample');
         }else{
@@ -155,54 +162,35 @@ class TodoController extends Controller
         }
         $task -> sample_path = $image;
         $task -> save();
-    
-    //   $param = [
-    //     'title' => $request -> title . "【Edited】",
-    //     'due_date' => $request -> due_date,
-    //     'id' => $request -> id,
-    //   ];
 
-    // //   dd($param['due_date']);
-    
-    //   //データベースに保存
-    //   DB::update('update todos set title = :title and due_date = :due_date where id = :id',$param);
-    
-      //リダイレクト
-      return redirect('/todos');
+        // 名前、メアド取得できた
+        return redirect('/todos');
     }
 
     public function check(int $id){
-
         $todo = DB::table('todos')->find($id);
-        return view('todo.check',['todo'=>$todo]);
-        
+        return view('todo.check',['todo'=>$todo]);    
     }
 
     public function del(Request $request){
-
         $param = [
             'id' => $request -> id
         ];
         DB::delete('delete from todos where id = :id', $param);
         return redirect('/todos');
-        
     }
 
     public function status_check(int $id){
-
         $todo = DB::table('todos')->find($id);
         return view('todo.status',['todo'=>$todo]);
-        
     }
 
     public function status_change(Request $request){
-
         $param = [
             'id' => $request -> id
         ];
         DB::update('update todos set status_flag = 2 where id = :id', $param);
         return redirect('/todos');
-        
     }
 
     public function category(){
@@ -216,20 +204,15 @@ class TodoController extends Controller
     }
 
     public function detail($id, Request $request){
-        // $task = Todo::find($id);
         $posts = $request -> get('posts'); 
-
         $task = Todo::select('todos.id','todos.title','todos.status_flag','todos.due_date','todos.sample_path','category.category','users.name as user_name')
         ->join('users', 'todos.assign_id', '=', 'users.id')
         ->join('category', 'todos.category_id', '=', 'category.id')
         ->where('todos.id', '=', $id)
         ->first();
-        // dd($task);s
         $comments = Comment::select('comment.comment')
         ->join('todos', 'comment.todo_id', '=', 'todos.id')
         ->get();
-        
-
         return view('todo.detail',['todo'=>$task,'comments'=>$comments]);
     }
 
@@ -239,20 +222,7 @@ class TodoController extends Controller
             'comment' => $request -> comment,
             'todo_id' => $task_id,
         ];
-
         DB::insert('insert into comment (comment, todo_id) values (:comment, :todo_id)', $param);
-
-        // $task = Todo::select('todos.id','todos.title','todos.status_flag','todos.due_date','todos.sample_path','category.category','users.name as user_name')
-        // ->join('users', 'todos.assign_id', '=', 'users.id')
-        // ->join('category', 'todos.category_id', '=', 'category.id')
-        // ->where('todos.id', '=', $id)
-        // ->first();
-
-        // $comments = Comment::select('comment.comment')
-        // ->join('todos', 'comment.todo_id', '=', 'todos.id')
-        // ->get();
-
-
         return redirect('/todos');
     }
 

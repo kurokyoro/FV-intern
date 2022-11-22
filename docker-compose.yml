@@ -4,6 +4,18 @@ volumes:
   db-store:
   psysh-store:
 services:
+  # mailhog:
+  #     image: mailhog/mailhog
+  #     ports:
+  #       - target: 8025
+  #         published: ${MAILHOG_PUBLISHED_PORT:-8025}
+  #         protocol: tcp
+  #         mode: host
+  mailhog:
+    image: mailhog/mailhog:latest
+    ports:
+      - "8025:8025"
+      - "1025:1025"
   app:
     build:
       context: .

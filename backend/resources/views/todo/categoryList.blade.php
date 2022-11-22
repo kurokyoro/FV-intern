@@ -15,16 +15,17 @@
                 {{-- <form method="POST" action="/todos/category/del" enctype="multipart/form-data"> --}}
                    
                     @foreach($categories as $category)
+                    @if($category->id === 1)
+                    @else
                     <div class="form-group col-8">
-                        @if($category->id === 1)
-                        @else
                         <form method="POST" action="/todos/category/del/{{$category->id}}" enctype="multipart/form-data">
                             @csrf
                             <label for="category" class="control-label">{{$category->category}}</label><br>
                             {{-- <input type="hidden" value="{{$category->id}}"> --}}
                             <button type="submit" name="delCategory">削除</button>
-                        @endif
+                        </form>
                     </div>
+                    @endif
                     @endforeach
                     <hr>
 
