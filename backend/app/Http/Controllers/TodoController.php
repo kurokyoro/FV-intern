@@ -36,6 +36,7 @@ class TodoController extends Controller
         $keyword = $request->input('keyword', '');
 
         $task = Todo::select('todos.id','todos.title','todos.created_at','todos.updated_at','todos.status_flag','todos.user_id','todos.due_date','todos.sample_path','todos.assign_id','category.category','todos.category_id','users.name as user_name')
+                    ->sortable()
                     ->join('users', 'todos.assign_id', '=', 'users.id')
                     ->join('category', 'todos.category_id', '=', 'category.id')
                     ->where('title', 'LIKE', "%{$keyword}%");

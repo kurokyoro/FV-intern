@@ -11,7 +11,7 @@
                             <th>
                                 <form action="" method="GET">
                                     <div style="display: flex; ">
-                                        <input name="keyword" class="form-control" type="text" style="width: 60%" placeholder="{{$keyword}}">
+                                        <input name="keyword" class="form-control" type="text" style="width: 50%" placeholder="{{$keyword}}">
                                         <button type="submit" class="btn" style="border: 1.5px #ced4da solid;background-color:#f8fafc;">タスク検索</button>
                                         <button type="submit" class="btn" style="border: 1.5px #ced4da solid;background-color:#f8fafc;">クリア</button>
                                     </div>
@@ -20,46 +20,54 @@
                         </tr>
                         <tr>
                             <th>
-                                <a href="/todos/create" class="btn btn-success">作成</a>
+                                <a href="/todos/create" class="btn btn-outline-success">新規タスク作成</a>
                             </th>
                             <th>
-                                <form method="GET" >
-                                    <button type="submit" name="sort" value="asc" class="btn btn-success">OLD</button>
-                                    <button type="submit" name="sort" value="desc" class="btn btn-primary">NEW</button>
-                                </form>
+                                @sortablelink('created_at', '作成日')
                             </th>
                             <th>
-                                <form method="GET">
-                                    <button type="submit" name="status" value="1" class="btn btn-success">未着手</button>
-                                    <button type="submit" name="status" value="2" class="btn btn-primary">完了</button>
-                                </form>
+                                @sortablelink('updated_at', '更新順')
+                            </th>
+                            <th>
+                                {{-- <form method="GET">
+                                    <select name="status" id="" class="form-select">
+                                        <option value="1">未着手</option>
+                                        <option value="2">完了</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-light">絞込</button>
+                                </form> --}}
                             </th>
                             <th>
                                 <form action="todos/category/del" method="GET">
-                                    <button type="submit" class="btn btn-success">
-                                        カテゴリー一覧
+                                    <button type="submit" class="btn btn-outline-primary">
+                                        カテゴリー
                                     </button>
                                 </form>
                             </th>
-                            <th>
+                            {{-- <th>
                                 <form action="/todos/category" method="GET">
                                     <button type="submit" class="btn btn-success">
                                         カテゴリー登録
                                     </button>
                                 </form>
-                            </th>
+                            </th> --}}
                             <th>
                                 
                                 <form action="" method="GET">
                                     <div style="display: flex;">
-                                    <select name="category" id="" class="form-control" style="width:70%;margin-right:10px;">
-                                        <option value="" disabled selected style="display: none">--カテゴリーで絞り込み--</option>
-                                        <option value="0">すべて表示</option>
-                                        @foreach($categories as $category)
-                                            <option value="{{$category->id}}">{{$category->category}}</option>
-                                        @endforeach
-                                    </select>
-                                    <button type="submit" class="btn" style="border: 1.5px #ced4da solid;background-color:#f8fafc;">絞り込み</button>
+                                        <select name="status" id="" class="form-select" style="width: 35%;">
+                                            <option value="" disabled selected style="display: none">ステータス</option>
+                                            <option value="1">未着手</option>
+                                            <option value="2">完了</option>
+                                        </select>
+                                        <select name="category" id="" class="form-select" style="width:35%;">
+                                            <option value="" disabled selected style="display: none">カテゴリー</option>
+                                            <option value="0">すべて表示</option>
+                                            @foreach($categories as $category)
+                                                <option value="{{$category->id}}">{{$category->category}}</option>
+                                            @endforeach
+                                        </select>
+                                        <button type="submit" class="btn" style="border: 1.5px #ced4da solid;background-color:#f8fafc;">絞り込み</button>
                                     </div>
                                 </form>
                             </th>
@@ -72,9 +80,9 @@
                             {{-- <th>ID</th> --}}
                             <th>タスク名</th>
                             <th>カテゴリー</th>
-                            <th>ステータス</th> 
+                            <th>@sortablelink('status_flag', 'ステータス')</th> 
                             <th>完了ボタン</th>
-                            <th>期日</th>
+                            <th>@sortablelink('due_date', '期日')</th>
                             <th>担当者</th>
                             <th>画像</th>
                             <th></th>
@@ -92,7 +100,7 @@
                                 <td>
                                     @if($todo->status_flag === 1)
                                     <form action="todos/status/{{$todo->id}}" method="GET">
-                                        <button class="btn btn-success">完了にする</button>
+                                        <button class="btn btn-outline-danger">完了にする</button>
                                     </form>
                                     @else
                                     @endif
@@ -122,7 +130,7 @@
                                 <td>
                                     @if($todo->status_flag === 1)
                                     <form action="todos/status/{{$todo->id}}" method="GET">
-                                        <button class="btn btn-success">完了にする</button>
+                                        <button class="btn btn-outline-danger">完了にする</button>
                                     </form>
                                     @else
                                     @endif
