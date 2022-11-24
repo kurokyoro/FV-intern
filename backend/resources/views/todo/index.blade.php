@@ -99,7 +99,8 @@
                                 <td><span class="label {{$todo->status_class}}">{{$todo->status_label}}</span></td>
                                 <td>
                                     @if($todo->status_flag === 1)
-                                    <form action="todos/status/{{$todo->id}}" method="GET">
+                                    <form action="{{route ('todo.status', ['id' => $todo->id])}}" method="GET">
+                                        @csrf
                                         <button class="btn btn-outline-danger">完了にする</button>
                                     </form>
                                     @else
@@ -116,7 +117,8 @@
                                 </td>
                                 <td class="child{{$todo->id}}"><a class="btn btn-success" href="/todos/edit/{{$todo->id}}" id="edit-button-{{$todo->id}}">編集</a></td>
                                 <td class="child{{$todo->id}}">
-                                    <form action="/todos/del/{{$todo->id}}" method="GET">
+                                    <form action="{{ route('todo.delete', ['id'=>$todo->id]) }}" method="POST">
+                                        @csrf
                                         <button type="submit" class="btn btn-danger" name="del-btn">削除</button>
                                     </form>
                                 </td>
@@ -129,8 +131,9 @@
                                 <td><span class="label {{$todo->status_class}}">{{$todo->status_label}}</span></td>
                                 <td>
                                     @if($todo->status_flag === 1)
-                                    <form action="todos/status/{{$todo->id}}" method="GET">
-                                        <button class="btn btn-outline-danger">完了にする</button>
+                                    <form action="{{ route('todo.status', ['id'=>$todo->id]) }}" method="GET">
+                                        @csrf
+                                        <button class="btn btn-outline-danger" type="submit">完了にする</button>
                                     </form>
                                     @else
                                     @endif
@@ -146,7 +149,8 @@
                                 </td>
                                 <td class="child{{$todo->id}}"><a class="btn btn-success" href="/todos/edit/{{$todo->id}}" id="edit-button-{{$todo->id}}">編集</a></td>
                                 <td class="child{{$todo->id}}">
-                                    <form action="/todos/del/{{$todo->id}}" method="GET">
+                                    <form action="{{ route('todo.delete', ['id'=>$todo->id]) }}" method="POST">
+                                        @csrf
                                         <button type="submit" class="btn btn-danger" name="del-btn">削除</button>
                                     </form>
                                 </td>

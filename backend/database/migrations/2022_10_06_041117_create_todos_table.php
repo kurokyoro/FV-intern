@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('sample_path');
             $table->unsignedInteger('assign_id');
             $table->unsignedInteger('category_id');
+            $table->softDeletes();
         });
     }
 
@@ -35,5 +36,8 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('todos');
+        Schema::table('todos', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
     }
 };

@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Kyslik\ColumnSortable\Sortable;
+use Illuminate\Database\Eloquent\SoftDeletes; 
 
 class Todo extends Model
 {
     use Sortable;
+    use SoftDeletes;
 
     const STATUS = [
         1 => [ 'label' => '未着手' , 'class' => 'label-danger'],

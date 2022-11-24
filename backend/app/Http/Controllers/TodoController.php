@@ -168,17 +168,15 @@ class TodoController extends Controller
         return redirect('/todos');
     }
 
-    public function check(int $id){
-        $todo = DB::table('todos')->find($id);
-        return view('todo.check',['todo'=>$todo]);    
-    }
+    // public function check(int $id){
+    //     $todo = DB::table('todos')->find($id);
+    //     return view('todo.check',['todo'=>$todo]);    
+    // }
 
-    public function del(Request $request){
-        $param = [
-            'id' => $request -> id
-        ];
-        DB::delete('delete from todos where id = :id', $param);
-        return redirect('/todos');
+    public function del(int $id){
+        // $id = $request -> id;
+        Todo::find($id)->delete();
+        return redirect()->to('/todos');
     }
 
     public function status_check(int $id){

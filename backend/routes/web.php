@@ -29,8 +29,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('/todos/create', [App\Http\Controllers\TodoController::class, 'store'])->name('todo.store');
     Route::get('/todos/edit/{id}', [App\Http\Controllers\TodoController::class, 'edit'])->name('todo.edit');
     Route::put('/todos/edit/{id}', [App\Http\Controllers\TodoController::class, 'update']);
-    Route::get('/todos/del/{id}', [App\Http\Controllers\TodoController::class, 'check'])->name('todo.check');
-    Route::put('/todos/del/{id}', [App\Http\Controllers\TodoController::class, 'del']);
+    // Route::get('/todos/del/{id}', [App\Http\Controllers\TodoController::class, 'check'])->name('todo.check');
+    Route::post('/todos/del/{id}', [App\Http\Controllers\TodoController::class, 'del'])->name('todo.delete');
     Route::get('/todos/status/{id}', [App\Http\Controllers\TodoController::class, 'status_check'])->name('todo.status');
     Route::post('/todos/status/{id}', [App\Http\Controllers\TodoController::class, 'status_change']);
     Route::get('/todos/category',[App\Http\Controllers\TodoController::class, 'category'])->name('todo.category');
