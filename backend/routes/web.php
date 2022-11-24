@@ -37,7 +37,12 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('/todos/category',[App\Http\Controllers\TodoController::class, 'create_category']);
     Route::get('/todos/task/{id}',[App\Http\Controllers\TodoController::class, 'detail'])->name('todo.detail');
     Route::post('/todos/{id}/comment',[App\Http\Controllers\TodoController::class, 'insertComment']);
-    Route::get('/todos/category/del',[App\Http\Controllers\TodoController::class, 'categoryList'])->name('todo.categoryList');
+    Route::get('/todos/category',[App\Http\Controllers\TodoController::class, 'categoryList'])->name('todo.category');
     Route::post('/todos/category/del/{id}',[App\Http\Controllers\TodoController::class, 'delCategory']);
     Route::get('/mail/send',[App\Http\Controllers\MailController::class, 'send'])->name('test.mail');
+    Route::get('/todos/search',[App\Http\Controllers\TodoController::class, 'search'])->name('todo.search');
+    Route::get("todos/trash/{id}",[App\Http\Controllers\TodoController::class, 'trash'])->name('todo.trash');
+    Route::post("todos/trash/{id}",[App\Http\Controllers\TodoController::class, 'destroy'])->name('todo.destroy');
+    Route::post("todos/restore/{id}",[App\Http\Controllers\TodoController::class, 'restore'])->name('todo.restore');
+
 });

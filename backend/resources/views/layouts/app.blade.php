@@ -12,7 +12,7 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-    <link href="https://use.fontawesome.com/releases/v6.2.0/css/all.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/4e1d840801.js" crossorigin="anonymous"></script>
 
 
     {{-- CSS --}}
