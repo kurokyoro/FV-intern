@@ -168,11 +168,6 @@ class TodoController extends Controller
         return redirect('/todos');
     }
 
-    // public function check(int $id){
-    //     $todo = DB::table('todos')->find($id);
-    //     return view('todo.check',['todo'=>$todo]);    
-    // }
-
     public function del(int $id){
         // $id = $request -> id;
         Todo::find($id)->delete();
@@ -237,8 +232,48 @@ class TodoController extends Controller
         return redirect('/todos');
     }
 
-    public function search(){
-        return view('todo.search');
+    public function result(Request $request,$id){
+        $keyword = $request -> keyword;
+        $status = $request -> status;
+        $assign = $request -> assign;
+        $due_date = $request -> due_date;
+        $datetime = new DateTime();
+        $datetime = $datetime -> format('Y-m-d');
+         
+        $query = Todo::query();
+        //結合
+        $query->join('users', function ($query) use ($request) {
+            $query->on('todos.assign_id', '=', 'users.id');
+            });
+        $query->join('category', function ($query) use ($request) {
+            $query->on('todos.category_id', '=', 'category.id');
+            });
+        $query = $query->where('todos.user_id','=',$id);
+
+        // もし検索フォームにキーワードが入力されたら
+        if ($keyword) {
+
+            // 全角スペースを半角に変換
+            $spaceConversion = mb_convert_kana($keyword, 's');
+
+            // 単語を半角スペースで区切り、配列にする（例："山田 翔" → ["山田", "翔"]）
+            $wordArraySearched = preg_split('/[\s,]+/', $spaceConversion, -1, PREG_SPLIT_NO_EMPTY);
+            
+            // 単語をループで回し、ユーザーネームと部分一致するものがあれば、$queryとして保持される
+            foreach($wordArraySearched as $value) {
+                $query->where('title', 'like', '%'.$value.'%');
+            }
+        }
+        if($status != 0){
+            $query->where('status_id','=',$status);
+        }
+        if($assign != 0){
+            $query->where('assign_id','=',$assign);
+        }
+        // if($due_date != 0)
+        // ビューへ渡す値を配列に格納
+        $hash = $query->get();
+        return view('todo.search',['todos'=>$hash,'datetime'=>$datetime]);
     }
 
     public function trash(int $id){
@@ -260,4 +295,5 @@ class TodoController extends Controller
         Todo::onlyTrashed()->find($id)->restore();
         return redirect('/todos');
     }
+
 }
