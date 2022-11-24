@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Kyslik\ColumnSortable\Sortable;
+use Illuminate\Database\Eloquent\SoftDeletes; 
 
 class Todo extends Model
 {
-    // use Sortable;
+    use Sortable;
+    use SoftDeletes;
 
     const STATUS = [
         1 => [ 'label' => '未着手' , 'class' => 'label-danger'],
@@ -16,7 +18,7 @@ class Todo extends Model
     ];
 
     protected $fillable = ['id','title','status_flag','created_at','updated_at','user_id','due_date','assign_flag','category_id']; 
-    // public $sortable = ['created_at'];
+    public $sortable = ['id','title','status_flag','created_at','updated_at','user_id','due_date','assign_flag','category_id'];
 
     // protected $guarded = array('id'); 
 

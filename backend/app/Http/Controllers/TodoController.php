@@ -36,6 +36,7 @@ class TodoController extends Controller
         $keyword = $request->input('keyword', '');
 
         $task = Todo::select('todos.id','todos.title','todos.created_at','todos.updated_at','todos.status_flag','todos.user_id','todos.due_date','todos.sample_path','todos.assign_id','category.category','todos.category_id','users.name as user_name')
+                    ->sortable()
                     ->join('users', 'todos.assign_id', '=', 'users.id')
                     ->join('category', 'todos.category_id', '=', 'category.id')
                     ->where('title', 'LIKE', "%{$keyword}%");
@@ -128,7 +129,7 @@ class TodoController extends Controller
     {
         $task = Todo::find($id);
         $user_id = $task -> assign_id;
-        $task -> title = $request -> title . "【Edited】";
+        $task -> title = $request -> title;
         $task -> due_date = $request -> due_date;
         $task -> assign_id = $request -> assign;
         $task -> category_id = $request -> category;
@@ -167,17 +168,15 @@ class TodoController extends Controller
         return redirect('/todos');
     }
 
-    public function check(int $id){
-        $todo = DB::table('todos')->find($id);
-        return view('todo.check',['todo'=>$todo]);    
-    }
+    // public function check(int $id){
+    //     $todo = DB::table('todos')->find($id);
+    //     return view('todo.check',['todo'=>$todo]);    
+    // }
 
-    public function del(Request $request){
-        $param = [
-            'id' => $request -> id
-        ];
-        DB::delete('delete from todos where id = :id', $param);
-        return redirect('/todos');
+    public function del(int $id){
+        // $id = $request -> id;
+        Todo::find($id)->delete();
+        return redirect()->to('/todos');
     }
 
     public function status_check(int $id){
@@ -238,4 +237,27 @@ class TodoController extends Controller
         return redirect('/todos');
     }
 
+    public function search(){
+        return view('todo.search');
+    }
+
+    public function trash(int $id){
+        $todo = Todo::onlyTrashed()
+            ->select('todos.id','todos.title','todos.created_at','todos.updated_at','todos.status_flag','todos.user_id','todos.due_date','todos.sample_path','todos.assign_id','category.category','todos.category_id','users.name as user_name')
+            ->sortable()
+            ->join('users', 'todos.assign_id', '=', 'users.id')
+            ->join('category', 'todos.category_id', '=', 'category.id')
+            ->get();
+        return view('todo.trash',['todos'=>$todo]);
+    }
+
+    public function destroy(int $id){
+        Todo::onlyTrashed()->find($id)->forceDelete();
+        return redirect('/todos');
+    }
+
+    public function restore(int $id){
+        Todo::onlyTrashed()->find($id)->restore();
+        return redirect('/todos');
+    }
 }

@@ -9,59 +9,14 @@
                     <thead>
                         <tr>
                             <th>
-                                <form action="" method="GET">
-                                    <div style="display: flex; ">
-                                        <input name="keyword" class="form-control" type="text" style="width: 60%" placeholder="{{$keyword}}">
-                                        <button type="submit" class="btn" style="border: 1.5px #ced4da solid;background-color:#f8fafc;">タスク検索</button>
-                                        <button type="submit" class="btn" style="border: 1.5px #ced4da solid;background-color:#f8fafc;">クリア</button>
-                                    </div>
-                                    </form>
-                            </th>
-                        </tr>
-                        <tr>
-                            <th>
-                                <a href="/todos/create" class="btn btn-success">作成</a>
+                                <a href="/todos/create" class="btn btn-outline-success">Top <i class="fa-solid fa-plus"></i></a>
+                                <a href="/todos/category" class="btn btn-outline-primary">カテゴリー <i class="fa-solid fa-tag"></i></a>
+                                <a href="/todos/search" class="btn btn-outline-info">検索 <i class="fa-solid fa-magnifying-glass"></i></a>
+                                <a href="/todos/trash/{{Auth::id()}}" class="btn btn-outline-dark">ゴミ箱 <i class="fa-regular fa-trash-can"></i></a>
                             </th>
                             <th>
-                                <form method="GET" >
-                                    <button type="submit" name="sort" value="asc" class="btn btn-success">OLD</button>
-                                    <button type="submit" name="sort" value="desc" class="btn btn-primary">NEW</button>
-                                </form>
-                            </th>
-                            <th>
-                                <form method="GET">
-                                    <button type="submit" name="status" value="1" class="btn btn-success">未着手</button>
-                                    <button type="submit" name="status" value="2" class="btn btn-primary">完了</button>
-                                </form>
-                            </th>
-                            <th>
-                                <form action="todos/category/del" method="GET">
-                                    <button type="submit" class="btn btn-success">
-                                        カテゴリー一覧
-                                    </button>
-                                </form>
-                            </th>
-                            <th>
-                                <form action="/todos/category" method="GET">
-                                    <button type="submit" class="btn btn-success">
-                                        カテゴリー登録
-                                    </button>
-                                </form>
-                            </th>
-                            <th>
-                                
-                                <form action="" method="GET">
-                                    <div style="display: flex;">
-                                    <select name="category" id="" class="form-control" style="width:70%;margin-right:10px;">
-                                        <option value="" disabled selected style="display: none">--カテゴリーで絞り込み--</option>
-                                        <option value="0">すべて表示</option>
-                                        @foreach($categories as $category)
-                                            <option value="{{$category->id}}">{{$category->category}}</option>
-                                        @endforeach
-                                    </select>
-                                    <button type="submit" class="btn" style="border: 1.5px #ced4da solid;background-color:#f8fafc;">絞り込み</button>
-                                    </div>
-                                </form>
+                                @sortablelink('created_at', '作成日')
+                                @sortablelink('updated_at', '更新順')
                             </th>
                         </tr>
                     </thead>
@@ -72,9 +27,9 @@
                             {{-- <th>ID</th> --}}
                             <th>タスク名</th>
                             <th>カテゴリー</th>
-                            <th>ステータス</th> 
+                            <th>@sortablelink('status_flag', 'ステータス')</th> 
                             <th>完了ボタン</th>
-                            <th>期日</th>
+                            <th>@sortablelink('due_date', '期日')</th>
                             <th>担当者</th>
                             <th>画像</th>
                             <th></th>
@@ -85,14 +40,18 @@
                         @foreach($todos as $todo)
                         @if($datetime > $todo->due_date)
                             <tr id="parent-{{$todo->id}}" style="background-color: #ffe3e6">
-                                {{-- <td class="child{{$todo->id}}">{{ $todo->id }}</td> --}}
+                                @if($todo->created_at == $todo->updated_at)
                                 <td class="child{{$todo->id}}" id="child-title-{{$todo->id}}"><a href="/todos/task/{{$todo->id}}"style="color: black;text-decoration:none;" onMouseOver="this.style.color='#277fff'" onMouseOut="this.style.color='black'">{{ $todo->title}}</a></td>
+                                @else
+                                <td class="child{{$todo->id}}" id="child-title-{{$todo->id}}"><a href="/todos/task/{{$todo->id}}"style="color: black;text-decoration:none;" onMouseOver="this.style.color='#277fff'" onMouseOut="this.style.color='black'">{{ $todo->title}}【Edited】</a></td>
+                                @endif
                                 <td>{{$todo->category}}</td>
                                 <td><span class="label {{$todo->status_class}}">{{$todo->status_label}}</span></td>
                                 <td>
                                     @if($todo->status_flag === 1)
-                                    <form action="todos/status/{{$todo->id}}" method="GET">
-                                        <button class="btn btn-success">完了にする</button>
+                                    <form action="{{route ('todo.status', ['id' => $todo->id])}}" method="GET">
+                                        @csrf
+                                        <button class="btn btn-outline-danger">完了にする</button>
                                     </form>
                                     @else
                                     @endif
@@ -108,21 +67,26 @@
                                 </td>
                                 <td class="child{{$todo->id}}"><a class="btn btn-success" href="/todos/edit/{{$todo->id}}" id="edit-button-{{$todo->id}}">編集</a></td>
                                 <td class="child{{$todo->id}}">
-                                    <form action="/todos/del/{{$todo->id}}" method="GET">
+                                    <form action="{{ route('todo.delete', ['id'=>$todo->id]) }}" method="POST">
+                                        @csrf
                                         <button type="submit" class="btn btn-danger" name="del-btn">削除</button>
                                     </form>
                                 </td>
                             </tr>
                         @else
                             <tr id="parent-{{$todo->id}}">
-                                {{-- <td class="child{{$todo->id}}">{{ $todo->id }}</td> --}}
+                                @if($todo->created_at == $todo->updated_at)
                                 <td class="child{{$todo->id}}" id="child-title-{{$todo->id}}"><a href="/todos/task/{{$todo->id}}" style="color: black;text-decoration:none;" onMouseOver="this.style.color='#277fff'" onMouseOut="this.style.color='black'">{{ $todo->title}}</a></td>
+                                @else
+                                <td class="child{{$todo->id}}" id="child-title-{{$todo->id}}"><a href="/todos/task/{{$todo->id}}" style="color: black;text-decoration:none;" onMouseOver="this.style.color='#277fff'" onMouseOut="this.style.color='black'">{{ $todo->title}}【Edited】</a></td>
+                                @endif
                                 <td>{{$todo->category}}</td>
                                 <td><span class="label {{$todo->status_class}}">{{$todo->status_label}}</span></td>
                                 <td>
                                     @if($todo->status_flag === 1)
-                                    <form action="todos/status/{{$todo->id}}" method="GET">
-                                        <button class="btn btn-success">完了にする</button>
+                                    <form action="{{ route('todo.status', ['id'=>$todo->id]) }}" method="GET">
+                                        @csrf
+                                        <button class="btn btn-outline-danger" type="submit">完了にする</button>
                                     </form>
                                     @else
                                     @endif
@@ -138,7 +102,8 @@
                                 </td>
                                 <td class="child{{$todo->id}}"><a class="btn btn-success" href="/todos/edit/{{$todo->id}}" id="edit-button-{{$todo->id}}">編集</a></td>
                                 <td class="child{{$todo->id}}">
-                                    <form action="/todos/del/{{$todo->id}}" method="GET">
+                                    <form action="{{ route('todo.delete', ['id'=>$todo->id]) }}" method="POST">
+                                        @csrf
                                         <button type="submit" class="btn btn-danger" name="del-btn">削除</button>
                                     </form>
                                 </td>
