@@ -15,27 +15,27 @@
                         <form action="{{ route('todo.result', ['id'=>Auth::id()]) }}" method="GET">
                         <label for="">キーワード</label>
                         <input type="text" class="form-control" name="keyword">
-                        <label for="">カテゴリー</label>
+                        <label for="" style="margin-top:5px;">カテゴリー</label>
                         <select name="category" id="" class="form-select">
                             <option value="0">指定なし</option>
                             @foreach($categories as $category)
                                 <option value="{{$category->id}}">{{$category->category}}</option>
                             @endforeach
                         </select>
-                        <label for="">ステータス</label>
+                        <label for="" style="margin-top:5px;">ステータス</label>
                         <select name="status" id="" class="form-select">
                             <option value="0">指定なし</option>
                             <option value="1">未着手</option>
                             <option value="2">完了</option>
                         </select>
-                        <label for="">担当者</label>
+                        <label for="" style="margin-top:5px;">担当者</label>
                         <select name="assign" id="" class="form-select">
                             <option value="0">指定なし</option>
                             @foreach($users as $user)
                                 <option value="{{$user->id}}">{{$user->name}}</option>
                             @endforeach
                         </select>
-                        <label for="due_date">期日</label>
+                        <label for="due_date" style="margin-top:5px;">期日</label>
                         <select name="due_date" id="" class="form-select">
                             <option value="0">指定なし</option>
                             <option value="1">まだ</option>
