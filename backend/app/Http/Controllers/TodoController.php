@@ -136,9 +136,11 @@ class TodoController extends Controller
         $image = $request -> image;
         $old_image = $request -> old_image;
         $old_image = substr($old_image,8);
-        $old_image = "public" . $old_image;
+        if($old_image !== '/'){
+            $old_image = "public" . $old_image;
+        }
+        $old_image = "";
         $user_id_edited = $task -> assign_id;
-        // mail送信設定
         if($user_id == $user_id_edited){
             $user = DB::table('users')->select('name', 'email')->find($user_id);
             $name = $user -> name;
@@ -236,12 +238,14 @@ class TodoController extends Controller
         $keyword = $request -> keyword;
         $status = $request -> status;
         $assign = $request -> assign;
+        $category = $request -> category;
         $due_date = $request -> due_date;
         $datetime = new DateTime();
         $datetime = $datetime -> format('Y-m-d');
+        $users = User::all();
+        $categories = Category::all();
          
-        $query = Todo::query();
-        //結合
+        $query = Todo::query()->sortable();
         $query->join('users', function ($query) use ($request) {
             $query->on('todos.assign_id', '=', 'users.id');
             });
@@ -250,40 +254,44 @@ class TodoController extends Controller
             });
         $query = $query->where('todos.user_id','=',$id);
 
-        // もし検索フォームにキーワードが入力されたら
         if ($keyword) {
-
-            // 全角スペースを半角に変換
             $spaceConversion = mb_convert_kana($keyword, 's');
-
-            // 単語を半角スペースで区切り、配列にする（例："山田 翔" → ["山田", "翔"]）
             $wordArraySearched = preg_split('/[\s,]+/', $spaceConversion, -1, PREG_SPLIT_NO_EMPTY);
-            
-            // 単語をループで回し、ユーザーネームと部分一致するものがあれば、$queryとして保持される
             foreach($wordArraySearched as $value) {
                 $query->where('title', 'like', '%'.$value.'%');
             }
         }
         if($status != 0){
-            $query->where('status_id','=',$status);
+            $query->where('status_flag','=',$status);
         }
         if($assign != 0){
             $query->where('assign_id','=',$assign);
         }
-        // if($due_date != 0)
-        // ビューへ渡す値を配列に格納
+        if($category != 0){
+            $query->where('category_id','=',$category);
+        }
+        if($due_date != 0){
+            if($due_date == 1){
+                $query->where('due_date','>=',$datetime);
+            }
+            else{
+                $query->where('due_date','<',$datetime);
+            }
+        }
         $hash = $query->get();
-        return view('todo.search',['todos'=>$hash,'datetime'=>$datetime]);
+        return view('todo.search',['todos'=>$hash,'datetime'=>$datetime,'users'=>$users,'categories'=>$categories]);
     }
 
     public function trash(int $id){
+        $datetime = new DateTime();
+        $datetime = $datetime -> format('Y-m-d');
         $todo = Todo::onlyTrashed()
             ->select('todos.id','todos.title','todos.created_at','todos.updated_at','todos.status_flag','todos.user_id','todos.due_date','todos.sample_path','todos.assign_id','category.category','todos.category_id','users.name as user_name')
             ->sortable()
             ->join('users', 'todos.assign_id', '=', 'users.id')
             ->join('category', 'todos.category_id', '=', 'category.id')
             ->get();
-        return view('todo.trash',['todos'=>$todo]);
+        return view('todo.trash',['todos'=>$todo,'datetime'=>$datetime]);
     }
 
     public function destroy(int $id){

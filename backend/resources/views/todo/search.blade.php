@@ -15,20 +15,31 @@
                         <form action="{{ route('todo.result', ['id'=>Auth::id()]) }}" method="GET">
                         <label for="">キーワード</label>
                         <input type="text" class="form-control" name="keyword">
+                        <label for="">カテゴリー</label>
+                        <select name="category" id="" class="form-select">
+                            <option value="0">指定なし</option>
+                            @foreach($categories as $category)
+                                <option value="{{$category->id}}">{{$category->category}}</option>
+                            @endforeach
+                        </select>
                         <label for="">ステータス</label>
                         <select name="status" id="" class="form-select">
-                            <option value="">指定なし</option>
-                            <option value="">未着手</option>
-                            <option value="">完了</option>
+                            <option value="0">指定なし</option>
+                            <option value="1">未着手</option>
+                            <option value="2">完了</option>
                         </select>
                         <label for="">担当者</label>
                         <select name="assign" id="" class="form-select">
-                            <option value="">指定なし</option>
-                            <option value="">aaa</option>
+                            <option value="0">指定なし</option>
+                            @foreach($users as $user)
+                                <option value="{{$user->id}}">{{$user->name}}</option>
+                            @endforeach
                         </select>
                         <label for="due_date">期日</label>
-                        <select name="" id="" class="form-select">
-                            <option value="">指定なし</option>
+                        <select name="due_date" id="" class="form-select">
+                            <option value="0">指定なし</option>
+                            <option value="1">まだ</option>
+                            <option value="2">期限切れ</option>
                         </select>
                         <div style="width:100%;text-align:center;">
                             <button type="submit" class="btn btn-success" style="margin-top:10px;">検索</button>
@@ -73,10 +84,10 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <span class="">{{$todo -> due_date}}</span>
+                                            <span class="">{{$todo->due_date}}</span>
                                         </td>
                                         <td>
-                                            <span>{{$todo->user_name}}</span>
+                                            <span>{{$todo->name}}</span>
                                         </td>
                                         <td>
                                             <img src="{{Storage::url($todo->sample_path)}}" alt="" width="" height="100px">
@@ -108,10 +119,10 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <span class="">{{$todo -> due_date}}</span>
+                                            <span class="">{{$todo->due_date}}</span>
                                         </td>
                                         <td>
-                                            <span>{{$todo->user_name}}</span>
+                                            <span>{{$todo->name}}</span>
                                         </td>
                                         <td>
                                             <img src="{{Storage::url($todo->sample_path)}}" alt="" width="" height="100px">
