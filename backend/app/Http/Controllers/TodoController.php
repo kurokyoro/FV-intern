@@ -32,13 +32,14 @@ class TodoController extends Controller
         $status = $request -> get('status');
         $category = $request -> get('category');
         $categories = Category::all();
-        $user_id = \Auth::id();
+        $user_id = Auth::id();
         $keyword = $request->input('keyword', '');
 
         $task = Todo::select('todos.id','todos.title','todos.created_at','todos.updated_at','todos.status_flag','todos.user_id','todos.due_date','todos.sample_path','todos.assign_id','category.category','todos.category_id','users.name as user_name')
                     ->sortable()
                     ->join('users', 'todos.assign_id', '=', 'users.id')
                     ->join('category', 'todos.category_id', '=', 'category.id')
+                    ->where('todos.user_id','=',$user_id)
                     ->where('title', 'LIKE', "%{$keyword}%");
         $todos = $task -> get();
 
@@ -197,7 +198,7 @@ class TodoController extends Controller
     public function create_category(Request $request){
         $category = $request -> category;
         DB::insert('insert into category (category) values (?)', [$category]);
-        return redirect('/todos');
+        return redirect('/todos/category');
     }
 
     public function detail($id, Request $request){

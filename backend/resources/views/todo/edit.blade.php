@@ -15,11 +15,6 @@
                 <form method="POST" action="/todos/edit/{{$todo->id}}" class="form-horizontal" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
-                    {{-- <div class="form-group">
-                        <label for="id" class="control-lavel">ID</label>
-                        <div>{{$todo->id}}</div>
-                    </div> --}}
-                    {{-- <hr> --}}
                     <div class="form-group">
                         <label for="title" class="control-label">タスク名<span class="badge badge-danger ml-2">{{ __('必須') }}</span></label>
                         <input class="form-control" name="title" type="text" value="{{ $todo->title }}">

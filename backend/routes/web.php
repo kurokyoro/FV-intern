@@ -43,5 +43,4 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get("todos/trash/",[App\Http\Controllers\TodoController::class, 'trash'])->name('todo.trash');
     Route::post("todos/trash/{id}",[App\Http\Controllers\TodoController::class, 'destroy'])->name('todo.destroy');
     Route::post("todos/restore/{id}",[App\Http\Controllers\TodoController::class, 'restore'])->name('todo.restore');
-
 });

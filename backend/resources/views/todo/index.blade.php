@@ -24,7 +24,6 @@
 				<table class="table">
                     <thead>
                         <tr>
-                            {{-- <th>ID</th> --}}
                             <th>タスク名</th>
                             <th>カテゴリー</th>
                             <th>@sortablelink('status_flag', 'ステータス')</th> 

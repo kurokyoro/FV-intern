@@ -12,8 +12,6 @@
                     @endforeach
                 </div>
                 @endif
-                {{-- <form method="POST" action="/todos/create" enctype="multipart/form-data">
-                    @csrf --}}
                     <div class="form-group col-8">
                         <label for="title" class="control-label">タスク名</label><br>
                         <p class="" style="font-size: 18px">{{$todo->title}}</p>
