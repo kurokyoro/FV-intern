@@ -141,7 +141,9 @@ class TodoController extends Controller
         if($old_image !== '/'){
             $old_image = "public" . $old_image;
         }
-        $old_image = "";
+        else{
+            $old_image = "";
+        }
         $user_id_edited = $task -> assign_id;
         if($user_id == $user_id_edited){
             $user = DB::table('users')->select('name', 'email')->find($user_id);

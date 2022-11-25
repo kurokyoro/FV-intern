@@ -56,7 +56,7 @@
                     <hr>
                     <div class="form-group">
                         <label for="image" class="control-label">画像<span class="badge badge-danger ml-2">{{ __('必須') }}</span></label>
-                        <input class="form-control" name="image" type="file" value="">
+                        <input class="form-control" name="image" type="file" value="" accept="image/jpeg,image/png">
                         <input type="hidden" name="old_image" type="text" value="{{ Storage::url($todo->sample_path) }}">
                     </div>
                     
