@@ -28,8 +28,8 @@
                     <hr>
                     <div class="form-group">
                         <label for="category" class="control-label">カテゴリー<span class="badge badge-danger ml-2">{{ __('必須') }}</span></label>
-                        <select name="category" id="" class="form-control" required>
-                            <option value="" disabled selected style="display: none">--選択してください--</option>
+                        <select name="category" id="" class="form-select" required>
+                            <option value="{{$todo->category_id}}" selected style="display: none">{{$old_category->category}}</option>
                             @foreach($categories as $category)
                                 <option value="{{$category->id}}">{{$category->category}}</option>
                             @endforeach
@@ -45,8 +45,8 @@
                     <hr>
                     <div class="form-group">
                         <label for="assign" class="control-label">担当者<span class="badge badge-danger ml-2">{{ __('必須') }}</span></label>
-                        <select name="assign" id="" class="form-control" required >
-                            <option value="" disabled selected style="display: none">--選択してください--</option>
+                        <select name="assign" id="" class="form-select" required >
+                            <option value="{{$todo->assign_id}}" selected style="display: none">{{$old_assign->name}}</option>
                             @foreach($users as $user)
                                 <option value="{{$user->id}}">{{$user->name}}</option>
                             @endforeach

@@ -21,7 +21,7 @@
                     <hr>
                     <div class="form-group col-8">
                         <label for="category" class="control-label">カテゴリー<span class="badge badge-danger ml-2">{{ __('必須') }}</span></label><br>
-                        <select name="category" id="" class="form-control">
+                        <select name="category" id="" class="form-select">
                             <option value="" disabled selected style="display: none">--選択してください--</option>
                             @foreach($categories as $category)
                                 <option value="{{$category->id}}">{{$category->category}}</option>
@@ -36,7 +36,7 @@
                     <hr>
                     <div class="form-group col-8">
                         <label for="charge" class="control-label">担当者<span class="badge badge-danger ml-2">{{ __('必須') }}</span></label><br>
-                        <select name="assign" id="" class="form-control">
+                        <select name="assign" id="" class="form-select">
                             <option value="" disabled selected style="display: none">--選択してください--</option>
                             @foreach($users as $user)
                                 <option value="{{$user->id}}">{{$user->name}}</option>

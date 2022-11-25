@@ -10,11 +10,11 @@ use App\Models\Comment;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
-use DateTime;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TestMail;
 use App\Mail\AssignMail;
 use App\Mail\ChangeMail;
+use DateTime;
 
 
 class TodoController extends Controller
@@ -122,7 +122,9 @@ class TodoController extends Controller
         $users = User::all();
         $categories = Category::all();
         $todo = DB::table('todos')->find($id);
-        return view('todo.edit',['todo'=>$todo,'users'=>$users,'categories'=>$categories]);
+        $old_category = Category::select('category')->where('id','=',$todo->category_id)->first();
+        $old_assign = User::select('name')->where('id','=',$todo->assign_id)->first();
+        return view('todo.edit',['todo'=>$todo,'users'=>$users,'categories'=>$categories,'old_category'=>$old_category,'old_assign'=>$old_assign]);
     }
 
     public function update(Request $request, int $id)
@@ -165,13 +167,10 @@ class TodoController extends Controller
         }
         $task -> sample_path = $image;
         $task -> save();
-
-        // 名前、メアド取得できた
         return redirect('/todos');
     }
 
     public function del(int $id){
-        // $id = $request -> id;
         Todo::find($id)->delete();
         return redirect()->to('/todos');
     }
@@ -234,7 +233,8 @@ class TodoController extends Controller
         return redirect('/todos');
     }
 
-    public function result(Request $request,$id){
+    public function result(Request $request){
+        $id = Auth::id();
         $keyword = $request -> keyword;
         $status = $request -> status;
         $assign = $request -> assign;
@@ -282,7 +282,8 @@ class TodoController extends Controller
         return view('todo.search',['todos'=>$hash,'datetime'=>$datetime,'users'=>$users,'categories'=>$categories]);
     }
 
-    public function trash(int $id){
+    public function trash(){
+        $id = Auth::id();
         $datetime = new DateTime();
         $datetime = $datetime -> format('Y-m-d');
         $todo = Todo::onlyTrashed()
@@ -296,12 +297,12 @@ class TodoController extends Controller
 
     public function destroy(int $id){
         Todo::onlyTrashed()->find($id)->forceDelete();
-        return redirect('/todos');
+        return redirect()->route('todo.trash');
     }
 
     public function restore(int $id){
         Todo::onlyTrashed()->find($id)->restore();
-        return redirect('/todos');
+        return redirect()->route('todo.trash');
     }
 
 }
