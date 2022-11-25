@@ -34,7 +34,8 @@
                     </thead>
                     <tbody id="parent-body">
                         @foreach($todos as $todo)
-                            <tr id="parent-{{$todo->id}}">
+                        @if($datetime > $todo->due_date)
+                            <tr id="parent-{{$todo->id}}" style="background-color: #ffe3e6">
                                 <td class="child{{$todo->id}}" id="child-title-{{$todo->id}}"><a href="/todos/task/{{$todo->id}}" style="color: black;text-decoration:none;" onMouseOver="this.style.color='#277fff'" onMouseOut="this.style.color='black'">{{ $todo->title}}</a></td>
                                 <td>{{$todo->category}}</td>
                                 <td><span class="label {{$todo->status_class}}">{{$todo->status_label}}</span></td>
@@ -60,6 +61,34 @@
                                     </form>
                                 </td>
                             </tr>
+                        @else
+                        <tr id="parent-{{$todo->id}}">
+                            <td class="child{{$todo->id}}" id="child-title-{{$todo->id}}"><a href="/todos/task/{{$todo->id}}" style="color: black;text-decoration:none;" onMouseOver="this.style.color='#277fff'" onMouseOut="this.style.color='black'">{{ $todo->title}}</a></td>
+                            <td>{{$todo->category}}</td>
+                            <td><span class="label {{$todo->status_class}}">{{$todo->status_label}}</span></td>
+                            <td>
+                                <span class="">{{$todo -> due_date}}</span>
+                            </td>
+                            <td>
+                                <span>{{$todo->user_name}}</span>
+                            </td>
+                            <td>
+                                <img src="{{Storage::url($todo->sample_path)}}" alt="" width="" height="100px">
+                            </td>
+                            <td class="child{{$todo->id}}">
+                                <form action="{{ route('todo.restore', ['id'=>$todo->id]) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-success" name="del-btn">復元</button>
+                                </form>
+                            </td>
+                            <td class="child{{$todo->id}}">
+                                <form action="{{ route('todo.destroy', ['id'=>$todo->id]) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger" name="del-btn" onclick='return confirm("削除しますか？");'>削除</button>
+                                </form>
+                            </td>
+                        </tr>
+                        @endif
                         @endforeach
                     </tbody>
                 </table>

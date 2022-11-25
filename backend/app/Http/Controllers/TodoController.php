@@ -136,9 +136,11 @@ class TodoController extends Controller
         $image = $request -> image;
         $old_image = $request -> old_image;
         $old_image = substr($old_image,8);
-        $old_image = "public" . $old_image;
+        if($old_image !== '/'){
+            $old_image = "public" . $old_image;
+        }
+        $old_image = "";
         $user_id_edited = $task -> assign_id;
-        // mail送信設定
         if($user_id == $user_id_edited){
             $user = DB::table('users')->select('name', 'email')->find($user_id);
             $name = $user -> name;
@@ -167,11 +169,6 @@ class TodoController extends Controller
         // 名前、メアド取得できた
         return redirect('/todos');
     }
-
-    // public function check(int $id){
-    //     $todo = DB::table('todos')->find($id);
-    //     return view('todo.check',['todo'=>$todo]);    
-    // }
 
     public function del(int $id){
         // $id = $request -> id;
@@ -237,18 +234,64 @@ class TodoController extends Controller
         return redirect('/todos');
     }
 
-    public function search(){
-        return view('todo.search');
+    public function result(Request $request,$id){
+        $keyword = $request -> keyword;
+        $status = $request -> status;
+        $assign = $request -> assign;
+        $category = $request -> category;
+        $due_date = $request -> due_date;
+        $datetime = new DateTime();
+        $datetime = $datetime -> format('Y-m-d');
+        $users = User::all();
+        $categories = Category::all();
+         
+        $query = Todo::query()->sortable();
+        $query->join('users', function ($query) use ($request) {
+            $query->on('todos.assign_id', '=', 'users.id');
+            });
+        $query->join('category', function ($query) use ($request) {
+            $query->on('todos.category_id', '=', 'category.id');
+            });
+        $query = $query->where('todos.user_id','=',$id);
+
+        if ($keyword) {
+            $spaceConversion = mb_convert_kana($keyword, 's');
+            $wordArraySearched = preg_split('/[\s,]+/', $spaceConversion, -1, PREG_SPLIT_NO_EMPTY);
+            foreach($wordArraySearched as $value) {
+                $query->where('title', 'like', '%'.$value.'%');
+            }
+        }
+        if($status != 0){
+            $query->where('status_flag','=',$status);
+        }
+        if($assign != 0){
+            $query->where('assign_id','=',$assign);
+        }
+        if($category != 0){
+            $query->where('category_id','=',$category);
+        }
+        if($due_date != 0){
+            if($due_date == 1){
+                $query->where('due_date','>=',$datetime);
+            }
+            else{
+                $query->where('due_date','<',$datetime);
+            }
+        }
+        $hash = $query->get();
+        return view('todo.search',['todos'=>$hash,'datetime'=>$datetime,'users'=>$users,'categories'=>$categories]);
     }
 
     public function trash(int $id){
+        $datetime = new DateTime();
+        $datetime = $datetime -> format('Y-m-d');
         $todo = Todo::onlyTrashed()
             ->select('todos.id','todos.title','todos.created_at','todos.updated_at','todos.status_flag','todos.user_id','todos.due_date','todos.sample_path','todos.assign_id','category.category','todos.category_id','users.name as user_name')
             ->sortable()
             ->join('users', 'todos.assign_id', '=', 'users.id')
             ->join('category', 'todos.category_id', '=', 'category.id')
             ->get();
-        return view('todo.trash',['todos'=>$todo]);
+        return view('todo.trash',['todos'=>$todo,'datetime'=>$datetime]);
     }
 
     public function destroy(int $id){
@@ -260,4 +303,5 @@ class TodoController extends Controller
         Todo::onlyTrashed()->find($id)->restore();
         return redirect('/todos');
     }
+
 }

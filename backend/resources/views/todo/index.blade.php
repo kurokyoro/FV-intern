@@ -9,9 +9,9 @@
                     <thead>
                         <tr>
                             <th>
-                                <a href="/todos/create" class="btn btn-outline-success">Top <i class="fa-solid fa-plus"></i></a>
+                                <a href="/todos/create" class="btn btn-outline-success">新規タスク追加 <i class="fa-solid fa-plus"></i></a>
                                 <a href="/todos/category" class="btn btn-outline-primary">カテゴリー <i class="fa-solid fa-tag"></i></a>
-                                <a href="/todos/search" class="btn btn-outline-info">検索 <i class="fa-solid fa-magnifying-glass"></i></a>
+                                <a href="/todos/search/{{Auth::id()}}" class="btn btn-outline-info">検索 <i class="fa-solid fa-magnifying-glass"></i></a>
                                 <a href="/todos/trash/{{Auth::id()}}" class="btn btn-outline-dark">ゴミ箱 <i class="fa-regular fa-trash-can"></i></a>
                             </th>
                             <th>

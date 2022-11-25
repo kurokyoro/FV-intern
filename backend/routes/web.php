@@ -29,7 +29,6 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('/todos/create', [App\Http\Controllers\TodoController::class, 'store'])->name('todo.store');
     Route::get('/todos/edit/{id}', [App\Http\Controllers\TodoController::class, 'edit'])->name('todo.edit');
     Route::put('/todos/edit/{id}', [App\Http\Controllers\TodoController::class, 'update']);
-    // Route::get('/todos/del/{id}', [App\Http\Controllers\TodoController::class, 'check'])->name('todo.check');
     Route::post('/todos/del/{id}', [App\Http\Controllers\TodoController::class, 'del'])->name('todo.delete');
     Route::get('/todos/status/{id}', [App\Http\Controllers\TodoController::class, 'status_check'])->name('todo.status');
     Route::post('/todos/status/{id}', [App\Http\Controllers\TodoController::class, 'status_change']);
@@ -40,7 +39,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('/todos/category',[App\Http\Controllers\TodoController::class, 'categoryList'])->name('todo.category');
     Route::post('/todos/category/del/{id}',[App\Http\Controllers\TodoController::class, 'delCategory']);
     Route::get('/mail/send',[App\Http\Controllers\MailController::class, 'send'])->name('test.mail');
-    Route::get('/todos/search',[App\Http\Controllers\TodoController::class, 'search'])->name('todo.search');
+    Route::get('/todos/search/{id}',[App\Http\Controllers\TodoController::class, 'result'])->name('todo.result');
     Route::get("todos/trash/{id}",[App\Http\Controllers\TodoController::class, 'trash'])->name('todo.trash');
     Route::post("todos/trash/{id}",[App\Http\Controllers\TodoController::class, 'destroy'])->name('todo.destroy');
     Route::post("todos/restore/{id}",[App\Http\Controllers\TodoController::class, 'restore'])->name('todo.restore');
